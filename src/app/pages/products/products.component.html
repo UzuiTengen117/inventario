@@ -2,11 +2,23 @@
   <div>
     <span class="eyebrow">Catálogo</span>
     <h1>Productos</h1>
-    <p class="muted">{{ formatNumber(filtered().length) }} resultados · valor total {{ formatMoney(totalValue()) }}</p>
+    <p class="muted">
+      {{ formatNumber(filtered().length) }} resultados · valor total {{ formatMoney(totalValue()) }}
+    </p>
   </div>
   <div class="head-actions">
     <button class="btn btn-outline" (click)="exportCsv()">
-      <svg class="icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <svg
+        class="icon"
+        width="15"
+        height="15"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
         <polyline points="7 10 12 15 17 10"></polyline>
         <line x1="12" y1="15" x2="12" y2="3"></line>
@@ -14,7 +26,17 @@
       Exportar CSV
     </button>
     <button class="btn btn-outline" (click)="csvInput.click()">
-      <svg class="icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <svg
+        class="icon"
+        width="15"
+        height="15"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
         <polyline points="17 8 12 3 7 8"></polyline>
         <line x1="12" y1="3" x2="12" y2="15"></line>
@@ -22,7 +44,17 @@
       Importar CSV
     </button>
     <a class="btn btn-primary" routerLink="/productos/nuevo">
-      <svg class="icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <svg
+        class="icon"
+        width="15"
+        height="15"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
         <line x1="12" y1="5" x2="12" y2="19"></line>
         <line x1="5" y1="12" x2="19" y2="12"></line>
       </svg>
@@ -33,9 +65,15 @@
 </section>
 
 @if (importReport(); as report) {
-  <div class="banner alert" [class.alert-success]="!report.error" [class.alert-error]="!!report.error">
+  <div
+    class="banner alert"
+    [class.alert-success]="!report.error"
+    [class.alert-error]="!!report.error"
+  >
     <div class="banner-text">
-      <div><strong>{{ report.ok }}</strong></div>
+      <div>
+        <strong>{{ report.ok }}</strong>
+      </div>
       @if (report.error) {
         <div class="muted">{{ report.error }}</div>
       }
@@ -53,18 +91,30 @@
       (input)="query.set($any($event.target).value)"
       aria-label="Buscar producto"
     />
-    <select [value]="category()" (change)="category.set($any($event.target).value)" aria-label="Filtrar por categoría">
+    <select
+      [value]="category()"
+      (change)="category.set($any($event.target).value)"
+      aria-label="Filtrar por categoría"
+    >
       <option value="">Todas las categorías</option>
       @for (c of categories; track c) {
         <option [value]="c">{{ categoryLabel(c) }}</option>
       }
     </select>
-    <select [value]="stockFilter()" (change)="stockFilter.set($any($event.target).value)" aria-label="Filtrar por nivel de stock">
+    <select
+      [value]="stockFilter()"
+      (change)="stockFilter.set($any($event.target).value)"
+      aria-label="Filtrar por nivel de stock"
+    >
       <option value="all">Todo el stock</option>
       <option value="low">Stock bajo</option>
       <option value="out">Agotados</option>
     </select>
-    <select [value]="supplierFilter()" (change)="supplierFilter.set($any($event.target).value)" aria-label="Filtrar por proveedor">
+    <select
+      [value]="supplierFilter()"
+      (change)="supplierFilter.set($any($event.target).value)"
+      aria-label="Filtrar por proveedor"
+    >
       <option value="">Todos los proveedores</option>
       @for (s of suppliers.list(); track s.id) {
         <option [value]="s.id">{{ s.name }}</option>
@@ -104,7 +154,9 @@
                     @if (row.product.image) {
                       <img [src]="row.product.image" alt="" loading="lazy" decoding="async" />
                     } @else {
-                      <span class="thumb-fallback" aria-hidden="true">{{ row.product.name.charAt(0).toUpperCase() }}</span>
+                      <span class="thumb-fallback" aria-hidden="true">{{
+                        row.product.name.charAt(0).toUpperCase()
+                      }}</span>
                     }
                   </span>
                   <strong>{{ row.product.name }}</strong>
@@ -137,8 +189,17 @@
                 }
               </td>
               <td class="row-actions">
-                <a class="btn btn-outline btn-sm" [routerLink]="['/productos/editar', row.product.id]">Editar</a>
-                <button class="btn btn-danger btn-sm" (click)="delete(row.product.id, row.product.name)">Eliminar</button>
+                <a
+                  class="btn btn-outline btn-sm"
+                  [routerLink]="['/productos/editar', row.product.id]"
+                  >Editar</a
+                >
+                <button
+                  class="btn btn-danger btn-sm"
+                  (click)="delete(row.product.id, row.product.name)"
+                >
+                  Eliminar
+                </button>
               </td>
             </tr>
           }

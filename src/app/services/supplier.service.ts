@@ -6,7 +6,11 @@ const STORAGE_KEY = 'inventory.suppliers';
 function isSupplier(value: unknown): value is Supplier {
   if (typeof value !== 'object' || value === null) return false;
   const v = value as Record<string, unknown>;
-  return typeof v['id'] === 'string' && typeof v['name'] === 'string' && typeof v['createdAt'] === 'string';
+  return (
+    typeof v['id'] === 'string' &&
+    typeof v['name'] === 'string' &&
+    typeof v['createdAt'] === 'string'
+  );
 }
 
 @Injectable({ providedIn: 'root' })
@@ -14,6 +18,7 @@ export class SupplierService {
   private readonly suppliers = signal<Supplier[]>(this.load());
 
   readonly list = computed(() => this.suppliers());
+  readonly byIdMap = computed(() => new Map(this.suppliers().map((s) => [s.id, s.name])));
 
   private load(): Supplier[] {
     try {
@@ -34,9 +39,36 @@ export class SupplierService {
   private seed(): Supplier[] {
     const now = new Date().toISOString();
     const items: Supplier[] = [
-      { id: 'sup-1', name: 'Distribuidora TechPlus', contactName: 'Laura García', email: 'ventas@techplus.example', phone: '+34 600 111 222', notes: 'Electrónica y periféricos. Entrega en 48h.', createdAt: now, updatedAt: now },
-      { id: 'sup-2', name: 'Suministros Iberia', contactName: 'Miguel Torres', email: 'pedidos@iberia.example', phone: '+34 910 555 333', notes: 'Papelería y oficina.', createdAt: now, updatedAt: now },
-      { id: 'sup-3', name: 'Herrajes y Máquinas SL', contactName: 'Ana Pérez', email: 'contacto@herrajessl.example', phone: '+34 930 222 444', notes: 'Herramientas profesionales.', createdAt: now, updatedAt: now },
+      {
+        id: 'sup-1',
+        name: 'Distribuidora TechPlus',
+        contactName: 'Laura García',
+        email: 'ventas@techplus.example',
+        phone: '+34 600 111 222',
+        notes: 'Electrónica y periféricos. Entrega en 48h.',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        id: 'sup-2',
+        name: 'Suministros Iberia',
+        contactName: 'Miguel Torres',
+        email: 'pedidos@iberia.example',
+        phone: '+34 910 555 333',
+        notes: 'Papelería y oficina.',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        id: 'sup-3',
+        name: 'Herrajes y Máquinas SL',
+        contactName: 'Ana Pérez',
+        email: 'contacto@herrajessl.example',
+        phone: '+34 930 222 444',
+        notes: 'Herramientas profesionales.',
+        createdAt: now,
+        updatedAt: now,
+      },
     ];
     localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
     return items;
@@ -48,7 +80,12 @@ export class SupplierService {
 
   add(draft: Omit<Supplier, 'id' | 'createdAt' | 'updatedAt'>): Supplier {
     const now = new Date().toISOString();
-    const supplier: Supplier = { id: crypto.randomUUID(), ...draft, createdAt: now, updatedAt: now };
+    const supplier: Supplier = {
+      id: crypto.randomUUID(),
+      ...draft,
+      createdAt: now,
+      updatedAt: now,
+    };
     this.suppliers.update((items) => [supplier, ...items]);
     this.persist();
     return supplier;
@@ -56,7 +93,9 @@ export class SupplierService {
 
   update(id: string, changes: Partial<Omit<Supplier, 'id' | 'createdAt'>>): void {
     this.suppliers.update((items) =>
-      items.map((s) => (s.id === id ? { ...s, ...changes, updatedAt: new Date().toISOString() } : s)),
+      items.map((s) =>
+        s.id === id ? { ...s, ...changes, updatedAt: new Date().toISOString() } : s,
+      ),
     );
     this.persist();
   }

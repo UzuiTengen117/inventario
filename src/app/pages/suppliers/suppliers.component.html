@@ -17,18 +17,30 @@
     <div class="card-head">
       <h2>{{ isEditing() ? 'Editar proveedor' : 'Nuevo proveedor' }}</h2>
       @if (isEditing()) {
-        <button type="button" class="btn btn-ghost btn-sm" (click)="cancelEdit()">Cancelar edición</button>
+        <button type="button" class="btn btn-ghost btn-sm" (click)="cancelEdit()">
+          Cancelar edición
+        </button>
       }
     </div>
     <form class="card-body sup-form" [formGroup]="form" (ngSubmit)="save()">
       <div class="field">
         <span class="label">Imagen / logo</span>
-        <app-image-upload label="logo" [value]="form.controls.image.value" (changed)="onImageChange($event)" />
+        <app-image-upload
+          label="logo"
+          [value]="form.controls.image.value"
+          (changed)="onImageChange($event)"
+        />
       </div>
 
       <div class="field">
         <label for="name">Nombre *</label>
-        <input id="name" type="text" formControlName="name" placeholder="Ej. Distribuidora TechPlus" autocomplete="off" />
+        <input
+          id="name"
+          type="text"
+          formControlName="name"
+          placeholder="Ej. Distribuidora TechPlus"
+          autocomplete="off"
+        />
         @if (form.controls.name.touched && form.controls.name.hasError('required')) {
           <span class="error-text">El nombre es obligatorio.</span>
         }
@@ -39,12 +51,24 @@
 
       <div class="field">
         <label for="contact">Persona de contacto</label>
-        <input id="contact" type="text" formControlName="contactName" placeholder="Nombre y apellidos" autocomplete="off" />
+        <input
+          id="contact"
+          type="text"
+          formControlName="contactName"
+          placeholder="Nombre y apellidos"
+          autocomplete="off"
+        />
       </div>
 
       <div class="field">
         <label for="email">Email</label>
-        <input id="email" type="email" formControlName="email" placeholder="ventas@empresa.com" autocomplete="off" />
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          placeholder="ventas@empresa.com"
+          autocomplete="off"
+        />
         @if (form.controls.email.touched && form.controls.email.hasError('email')) {
           <span class="error-text">Introduce un email válido.</span>
         }
@@ -52,12 +76,22 @@
 
       <div class="field">
         <label for="phone">Teléfono</label>
-        <input id="phone" type="tel" formControlName="phone" placeholder="+34 600 000 000" autocomplete="off" />
+        <input
+          id="phone"
+          type="tel"
+          formControlName="phone"
+          placeholder="+34 600 000 000"
+          autocomplete="off"
+        />
       </div>
 
       <div class="field field-full">
         <label for="notes">Notas</label>
-        <textarea id="notes" formControlName="notes" placeholder="Plazos de entrega, condiciones de pago…"></textarea>
+        <textarea
+          id="notes"
+          formControlName="notes"
+          placeholder="Plazos de entrega, condiciones de pago…"
+        ></textarea>
       </div>
 
       <div class="full actions">
@@ -70,7 +104,9 @@
 
   <section class="card">
     <div class="card-head">
-      <h2>Tus proveedores <span class="muted">({{ formatNumber(rows().length) }})</span></h2>
+      <h2>
+        Tus proveedores <span class="muted">({{ formatNumber(rows().length) }})</span>
+      </h2>
     </div>
 
     @if (rows().length === 0) {
@@ -98,7 +134,9 @@
                       @if (row.supplier.image) {
                         <img [src]="row.supplier.image" alt="" loading="lazy" decoding="async" />
                       } @else {
-                        <span class="avatar-fallback" aria-hidden="true">{{ initials(row.supplier.name) }}</span>
+                        <span class="avatar-fallback" aria-hidden="true">{{
+                          initials(row.supplier.name)
+                        }}</span>
                       }
                     </span>
                     <span>
@@ -113,8 +151,15 @@
                 </td>
                 <td class="num">{{ formatNumber(row.productCount) }}</td>
                 <td class="row-actions">
-                  <button class="btn btn-outline btn-sm" (click)="startEdit(row.supplier.id)">Editar</button>
-                  <button class="btn btn-danger btn-sm" (click)="remove(row.supplier.id, row.supplier.name)">Eliminar</button>
+                  <button class="btn btn-outline btn-sm" (click)="startEdit(row.supplier.id)">
+                    Editar
+                  </button>
+                  <button
+                    class="btn btn-danger btn-sm"
+                    (click)="remove(row.supplier.id, row.supplier.name)"
+                  >
+                    Eliminar
+                  </button>
                 </td>
               </tr>
             }

@@ -1,4 +1,12 @@
-import { Component, signal, computed, inject, OnInit, ChangeDetectionStrategy, input } from '@angular/core';
+import {
+  Component,
+  signal,
+  computed,
+  inject,
+  OnInit,
+  ChangeDetectionStrategy,
+  input,
+} from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { ProductService } from '../../services/product.service';

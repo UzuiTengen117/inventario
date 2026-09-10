@@ -101,7 +101,9 @@
   font-weight: 700;
   background: var(--surface-2);
   color: inherit;
-  transition: background 160ms ease, color 160ms ease;
+  transition:
+    background 160ms ease,
+    color 160ms ease;
 }
 
 .type-txt {

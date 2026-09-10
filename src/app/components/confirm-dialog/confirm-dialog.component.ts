@@ -1,4 +1,12 @@
-import { Component, ChangeDetectionStrategy, inject, HostListener, viewChild, effect, ElementRef } from '@angular/core';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  inject,
+  HostListener,
+  viewChild,
+  effect,
+  ElementRef,
+} from '@angular/core';
 import { ConfirmService } from '../../services/confirm.service';
 
 @Component({

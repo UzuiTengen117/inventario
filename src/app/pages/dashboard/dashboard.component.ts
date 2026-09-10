@@ -2,8 +2,15 @@ import { Component, computed, inject, ChangeDetectionStrategy } from '@angular/c
 import { RouterLink } from '@angular/router';
 import { ProductService } from '../../services/product.service';
 import { MovementService } from '../../services/movement.service';
-import { CATEGORIES, categoryLabel, formatMoney, formatNumber, formatDate, movementTypeLabel } from '../../utils/format';
-import { Product, ProductCategory } from '../../models/product.model';
+import {
+  CATEGORIES,
+  categoryLabel,
+  formatMoney,
+  formatNumber,
+  formatDate,
+  movementTypeLabel,
+} from '../../utils/format';
+import { ProductCategory } from '../../models/product.model';
 import { MovementType } from '../../models/movement.model';
 
 interface Point {
@@ -31,7 +38,13 @@ export class DashboardComponent {
     const totalUnits = list.reduce((s, p) => s + p.stock, 0);
     const valueCost = list.reduce((s, p) => s + p.stock * p.cost, 0);
     const valueSale = list.reduce((s, p) => s + p.stock * p.price, 0);
-    return { count: list.length, totalUnits, valueCost, valueSale, low: this.products.lowStock().length };
+    return {
+      count: list.length,
+      totalUnits,
+      valueCost,
+      valueSale,
+      low: this.products.lowStock().length,
+    };
   });
 
   readonly categories = computed(() =>
@@ -56,7 +69,6 @@ export class DashboardComponent {
   };
 
   private readonly dayLabel = new Intl.DateTimeFormat('es-ES', { day: 'numeric', month: 'short' });
-  readonly gaugeC = 2 * Math.PI * 60;
 
   readonly donut = computed(() => {
     const total = this.stats().totalUnits;
@@ -109,7 +121,8 @@ export class DashboardComponent {
     const max = Math.max(1, ...series.flatMap((b) => [b.entries, b.exits]));
     const x = (i: number): number => frame.padX + (i * (frame.w - 2 * frame.padX)) / (days - 1);
     const y = (v: number): number => frame.bottom - (v / max) * (frame.bottom - frame.top);
-    const pts = (field: 'entries' | 'exits'): Point[] => series.map((b, i) => ({ x: x(i), y: y(b[field]) }));
+    const pts = (field: 'entries' | 'exits'): Point[] =>
+      series.map((b, i) => ({ x: x(i), y: y(b[field]) }));
     const entries = pts('entries');
     const exits = pts('exits');
     const area = (p: Point[]): string =>
@@ -169,11 +182,14 @@ export class DashboardComponent {
   }
 
   readonly recent = computed(() => {
-    const byId = new Map(this.products.list().map((p: Product) => [p.id, p]));
-    return this.movements.list().slice(0, 6).map((m) => ({
-      m,
-      product: byId.get(m.productId),
-    }));
+    const byId = this.products.byIdIndex();
+    return this.movements
+      .list()
+      .slice(0, 6)
+      .map((m) => ({
+        m,
+        product: byId.get(m.productId),
+      }));
   });
 
   protected readonly formatMoney = formatMoney;

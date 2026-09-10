@@ -72,11 +72,18 @@ export class MovementService {
     return null;
   }
 
-  resume(product?: Product): { entries: number; exits: number; balance: number; movements: Movement[] } {
+  resume(product?: Product): {
+    entries: number;
+    exits: number;
+    balance: number;
+    movements: Movement[];
+  } {
     const history = product ? this.list().filter((m) => m.productId === product.id) : this.list();
     const entries = history.filter((m) => m.type === 'entrada').reduce((s, m) => s + m.quantity, 0);
     const exits = history.filter((m) => m.type === 'salida').reduce((s, m) => s + m.quantity, 0);
-    const adjustments = history.filter((m) => m.type === 'ajuste').reduce((s, m) => s + m.quantity, 0);
+    const adjustments = history
+      .filter((m) => m.type === 'ajuste')
+      .reduce((s, m) => s + m.quantity, 0);
     return { entries, exits, balance: entries - exits + adjustments, movements: history };
   }
 }

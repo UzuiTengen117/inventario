@@ -1,7 +1,17 @@
 <section class="page-head">
   <div>
     <a class="back" routerLink="/productos">
-      <svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <svg
+        class="icon"
+        width="14"
+        height="14"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
         <line x1="19" y1="12" x2="5" y2="12"></line>
         <polyline points="12 19 5 12 12 5"></polyline>
       </svg>
@@ -9,7 +19,13 @@
     </a>
     <span class="eyebrow">Registro</span>
     <h1>{{ isEditing() ? 'Editar producto' : 'Nuevo producto' }}</h1>
-    <p class="muted">{{ isEditing() ? 'Modifica los datos y guarda los cambios.' : 'Completa la ficha para registrar el producto.' }}</p>
+    <p class="muted">
+      {{
+        isEditing()
+          ? 'Modifica los datos y guarda los cambios.'
+          : 'Completa la ficha para registrar el producto.'
+      }}
+    </p>
   </div>
 </section>
 
@@ -21,12 +37,22 @@
   <div class="form-grid card-pad">
     <div class="field field-full">
       <span class="label">Fotografía del producto</span>
-      <app-image-upload label="fotografía" [value]="form.controls.image.value" (changed)="onImageChange($event)" />
+      <app-image-upload
+        label="fotografía"
+        [value]="form.controls.image.value"
+        (changed)="onImageChange($event)"
+      />
     </div>
 
     <div class="field">
       <label for="name">Nombre *</label>
-      <input id="name" type="text" formControlName="name" placeholder="Ej. Audífonos Bluetooth" autocomplete="off" />
+      <input
+        id="name"
+        type="text"
+        formControlName="name"
+        placeholder="Ej. Audífonos Bluetooth"
+        autocomplete="off"
+      />
       @if (form.controls.name.touched && form.controls.name.hasError('required')) {
         <span class="error-text">El nombre es obligatorio.</span>
       }
@@ -34,7 +60,13 @@
 
     <div class="field">
       <label for="sku">SKU *</label>
-      <input id="sku" type="text" formControlName="sku" placeholder="Ej. ELC-001" autocomplete="off" />
+      <input
+        id="sku"
+        type="text"
+        formControlName="sku"
+        placeholder="Ej. ELC-001"
+        autocomplete="off"
+      />
       @if (form.controls.sku.touched && form.controls.sku.hasError('required')) {
         <span class="error-text">El SKU es obligatorio.</span>
       }
@@ -75,7 +107,11 @@
 
     <div class="field field-full">
       <label for="description">Descripción</label>
-      <textarea id="description" formControlName="description" placeholder="Características, detalles, notas…"></textarea>
+      <textarea
+        id="description"
+        formControlName="description"
+        placeholder="Características, detalles, notas…"
+      ></textarea>
     </div>
 
     <div class="field">

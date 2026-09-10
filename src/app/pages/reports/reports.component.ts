@@ -25,13 +25,14 @@ export class ReportsComponent {
     const sale = list.reduce((s, p) => s + p.stock * p.price, 0);
     const req = list.reduce((s, p) => s + p.minStock, 0);
     const coverage = req > 0 ? Math.min(1, units / req) : 1;
-    return { count: list.length, units, cost, sale, margin: sale - cost, coveragePct: Math.round(coverage * 100) };
-  });
-
-  private readonly supplierNames = computed(() => {
-    const map = new Map<string, string>();
-    for (const s of this.suppliers.list()) map.set(s.id, s.name);
-    return map;
+    return {
+      count: list.length,
+      units,
+      cost,
+      sale,
+      margin: sale - cost,
+      coveragePct: Math.round(coverage * 100),
+    };
   });
 
   readonly toReplenish = computed(() =>
@@ -40,9 +41,16 @@ export class ReportsComponent {
       .filter((p) => p.stock < p.minStock)
       .map((p) => {
         const target = p.minStock * 2;
-        return { product: p, deficit: p.minStock - p.stock, suggested: Math.max(0, target - p.stock) };
+        return {
+          product: p,
+          deficit: p.minStock - p.stock,
+          suggested: Math.max(0, target - p.stock),
+        };
       })
-      .sort((a, b) => a.product.stock / (a.product.minStock || 1) - b.product.stock / (b.product.minStock || 1)),
+      .sort(
+        (a, b) =>
+          a.product.stock / (a.product.minStock || 1) - b.product.stock / (b.product.minStock || 1),
+      ),
   );
 
   readonly byCategory = computed(() =>
@@ -68,7 +76,7 @@ export class ReportsComponent {
   );
 
   supplierName(id?: string): string {
-    return id ? (this.supplierNames().get(id) ?? '') : '';
+    return id ? (this.suppliers.byIdMap().get(id) ?? '') : '';
   }
 
   exportJson(): void {

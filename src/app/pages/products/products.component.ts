@@ -26,7 +26,17 @@ interface ImportReport {
   error: string | null;
 }
 
-const HEADERS = ['SKU', 'Producto', 'Categoría', 'Descripción', 'Precio', 'Coste', 'Stock', 'Mínimo', 'Proveedor'];
+const HEADERS = [
+  'SKU',
+  'Producto',
+  'Categoría',
+  'Descripción',
+  'Precio',
+  'Coste',
+  'Stock',
+  'Mínimo',
+  'Proveedor',
+];
 const MAX_IMPORT_MB = 5;
 const MAX_IMPORT_BYTES = MAX_IMPORT_MB * 1024 * 1024;
 
@@ -76,12 +86,6 @@ export class ProductsComponent {
   private readonly toasts = inject(ToastService);
   private readonly confirm = inject(ConfirmService);
 
-  readonly supplierByProduct = computed(() => {
-    const map = new Map<string, string>();
-    for (const s of this.suppliers.list()) map.set(s.id, s.name);
-    return map;
-  });
-
   readonly filtered = computed(() => {
     const q = this.query().trim().toLowerCase();
     const cat = this.category();
@@ -103,12 +107,10 @@ export class ProductsComponent {
     return rows;
   });
 
-  readonly totalValue = computed(() =>
-    this.filtered().reduce((s, r) => s + r.value, 0),
-  );
+  readonly totalValue = computed(() => this.filtered().reduce((s, r) => s + r.value, 0));
 
   supplierName(id?: string): string {
-    return id ? (this.supplierByProduct().get(id) ?? '') : '';
+    return id ? (this.suppliers.byIdMap().get(id) ?? '') : '';
   }
 
   reset(): void {
@@ -140,8 +142,14 @@ export class ProductsComponent {
     const file = input.files?.[0];
     if (!file) return;
     if (file.size > MAX_IMPORT_BYTES) {
-      this.importReport.set({ ok: '', error: `El archivo supera el límite de ${MAX_IMPORT_MB} MB.` });
-      this.toasts.error('Importación fallida', `El archivo supera el límite de ${MAX_IMPORT_MB} MB.`);
+      this.importReport.set({
+        ok: '',
+        error: `El archivo supera el límite de ${MAX_IMPORT_MB} MB.`,
+      });
+      this.toasts.error(
+        'Importación fallida',
+        `El archivo supera el límite de ${MAX_IMPORT_MB} MB.`,
+      );
       input.value = '';
       return;
     }
@@ -168,9 +176,13 @@ export class ProductsComponent {
     if (cSku === -1 && cName === -1) {
       this.importReport.set({
         ok: '',
-        error: 'No se encontraron las columnas "SKU" y "Producto". Revisa la primera fila del archivo.',
+        error:
+          'No se encontraron las columnas "SKU" y "Producto". Revisa la primera fila del archivo.',
       });
-      this.toasts.error('Importación fallida', 'No se encontraron las columnas "SKU" y "Producto".');
+      this.toasts.error(
+        'Importación fallida',
+        'No se encontraron las columnas "SKU" y "Producto".',
+      );
       return;
     }
 
@@ -258,7 +270,10 @@ export class ProductsComponent {
     if (errorCount === 0) {
       this.toasts.success('Importación completada', `${ok} producto(s) importado(s).`);
     } else if (ok > 0) {
-      this.toasts.warn('Importación parcial', `${ok} importado(s) · ${errorCount} fila(s) omitida(s).`);
+      this.toasts.warn(
+        'Importación parcial',
+        `${ok} importado(s) · ${errorCount} fila(s) omitida(s).`,
+      );
     } else {
       this.toasts.error('Importación fallida', `${errorCount} fila(s) omitida(s).`);
     }

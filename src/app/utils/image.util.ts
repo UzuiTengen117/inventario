@@ -36,7 +36,3 @@ export function fileToImageDataUrl(file: File): Promise<string> {
     reader.readAsDataURL(file);
   });
 }
-
-export function imageError(url: string | undefined): boolean {
-  return !url;
-}

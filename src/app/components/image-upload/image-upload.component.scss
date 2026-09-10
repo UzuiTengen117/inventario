@@ -122,7 +122,9 @@
   background: rgb(255 255 255 / 0.92);
   color: var(--ink);
   cursor: pointer;
-  transition: transform var(--press) var(--ease-out), background 140ms ease;
+  transition:
+    transform var(--press) var(--ease-out),
+    background 140ms ease;
 }
 
 .iu-btn:active {
@@ -139,7 +141,9 @@
   background: rgb(255 255 255 / 0.92);
   color: var(--red);
   cursor: pointer;
-  transition: transform var(--press) var(--ease-out), background 140ms ease;
+  transition:
+    transform var(--press) var(--ease-out),
+    background 140ms ease;
 }
 
 .iu-x:active {

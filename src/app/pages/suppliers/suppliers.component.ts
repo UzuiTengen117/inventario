@@ -1,4 +1,11 @@
-import { Component, signal, computed, inject, ChangeDetectionStrategy, OnInit } from '@angular/core';
+import {
+  Component,
+  signal,
+  computed,
+  inject,
+  ChangeDetectionStrategy,
+  OnInit,
+} from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SupplierService } from '../../services/supplier.service';
 import { ProductService } from '../../services/product.service';
@@ -87,7 +94,8 @@ export class SuppliersComponent implements OnInit {
 
     const value = this.form.getRawValue();
     const duplicate =
-      this.suppliers.list().find((s) => s.name.toLowerCase() === value.name.trim().toLowerCase())?.id ?? '';
+      this.suppliers.list().find((s) => s.name.toLowerCase() === value.name.trim().toLowerCase())
+        ?.id ?? '';
     if (duplicate && duplicate !== this.editingId()) {
       this.error.set('Ya existe un proveedor con ese nombre.');
       this.toasts.error('Nombre duplicado', 'Ya existe un proveedor con ese nombre.');

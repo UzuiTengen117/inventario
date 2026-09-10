@@ -198,7 +198,9 @@
 
 .ctl:focus-visible {
   outline: none;
-  box-shadow: var(--shadow-inset1), 0 0 0 3px rgb(124 92 255 / 0.28);
+  box-shadow:
+    var(--shadow-inset1),
+    0 0 0 3px rgb(124 92 255 / 0.28);
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -207,7 +209,7 @@
   }
 }
 
-.ctl-theme[aria-pressed="true"] {
+.ctl-theme[aria-pressed='true'] {
   color: var(--saffron);
 }
 
@@ -387,7 +389,9 @@
     background: color-mix(in srgb, var(--surface) 82%, transparent);
     backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--line);
-    transition: background-color 240ms ease, border-color 240ms ease;
+    transition:
+      background-color 240ms ease,
+      border-color 240ms ease;
   }
 
   .mobile-title {
@@ -426,7 +430,9 @@
 
   .icon-btn:focus-visible {
     outline: none;
-    box-shadow: var(--shadow-inset1), 0 0 0 3px rgb(124 92 255 / 0.28);
+    box-shadow:
+      var(--shadow-inset1),
+      0 0 0 3px rgb(124 92 255 / 0.28);
   }
 
   .icon-btn-mf {

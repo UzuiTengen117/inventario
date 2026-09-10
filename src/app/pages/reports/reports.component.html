@@ -5,12 +5,45 @@
     <p class="muted">Salud del inventario, reposición sugerida y valoración del stock.</p>
   </div>
   <div class="head-actions">
-    <button type="button" class="btn btn-outline btn-sm" (click)="exportReplenishCsv()" [disabled]="toReplenish().length === 0">
-      <svg class="icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+    <button
+      type="button"
+      class="btn btn-outline btn-sm"
+      (click)="exportReplenishCsv()"
+      [disabled]="toReplenish().length === 0"
+    >
+      <svg
+        class="icon"
+        width="15"
+        height="15"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+        <polyline points="7 10 12 15 17 10"></polyline>
+        <line x1="12" y1="15" x2="12" y2="3"></line>
+      </svg>
       Reposición (CSV)
     </button>
     <button type="button" class="btn btn-primary btn-sm" (click)="exportJson()">
-      <svg class="icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+      <svg
+        class="icon"
+        width="15"
+        height="15"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+        <polyline points="7 10 12 15 17 10"></polyline>
+        <line x1="12" y1="15" x2="12" y2="3"></line>
+      </svg>
       Informe completo (JSON)
     </button>
   </div>
@@ -20,7 +53,10 @@
   <div class="kpi">
     <span class="kpi-label">Valor del stock (coste)</span>
     <strong class="kpi-value">{{ formatMoney(totals().cost) }}</strong>
-    <span class="kpi-delta">{{ formatNumber(totals().units) }} unidades · {{ formatNumber(totals().count) }} productos</span>
+    <span class="kpi-delta"
+      >{{ formatNumber(totals().units) }} unidades ·
+      {{ formatNumber(totals().count) }} productos</span
+    >
   </div>
   <div class="kpi">
     <span class="kpi-label">Valor de venta</span>
@@ -30,7 +66,9 @@
   <div class="kpi">
     <span class="kpi-label">Margen potencial</span>
     <strong class="kpi-value">{{ formatMoney(totals().margin) }}</strong>
-    <span class="kpi-delta" [class]="totals().margin >= 0 ? 'up' : 'down'">{{ totals().margin >= 0 ? 'beneficio estimado' : 'pérdida estimada' }}</span>
+    <span class="kpi-delta" [class]="totals().margin >= 0 ? 'up' : 'down'">{{
+      totals().margin >= 0 ? 'beneficio estimado' : 'pérdida estimada'
+    }}</span>
   </div>
   <div class="kpi">
     <span class="kpi-label">Cobertura de mínimos</span>
@@ -76,17 +114,23 @@
                       @if (row.product.image) {
                         <img [src]="row.product.image" alt="" loading="lazy" decoding="async" />
                       } @else {
-                        <span class="thumb-fallback">{{ row.product.name.charAt(0).toUpperCase() }}</span>
+                        <span class="thumb-fallback">{{
+                          row.product.name.charAt(0).toUpperCase()
+                        }}</span>
                       }
                     </span>
                     <span class="prod-txt">
-                      <a class="prod-link" [routerLink]="['/productos/editar', row.product.id]">{{ row.product.name }}</a>
+                      <a class="prod-link" [routerLink]="['/productos/editar', row.product.id]">{{
+                        row.product.name
+                      }}</a>
                       <span class="sku muted table-sub">{{ row.product.sku }}</span>
                     </span>
                   </div>
                 </td>
                 <td class="num">
-                  <strong [class.crit]="row.product.stock === 0">{{ formatNumber(row.product.stock) }}</strong>
+                  <strong [class.crit]="row.product.stock === 0">{{
+                    formatNumber(row.product.stock)
+                  }}</strong>
                 </td>
                 <td class="num muted">{{ formatNumber(row.product.minStock) }}</td>
                 <td class="num">

@@ -5,13 +5,23 @@
     <p class="muted">Registra entradas, salidas y ajustes de stock.</p>
   </div>
   <button class="btn btn-outline" (click)="exportCsv()">
-      <svg class="icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-        <polyline points="7 10 12 15 17 10"></polyline>
-        <line x1="12" y1="15" x2="12" y2="3"></line>
-      </svg>
-      Exportar CSV
-    </button>
+    <svg
+      class="icon"
+      width="15"
+      height="15"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+      <polyline points="7 10 12 15 17 10"></polyline>
+      <line x1="12" y1="15" x2="12" y2="3"></line>
+    </svg>
+    Exportar CSV
+  </button>
 </section>
 
 <div class="grid-layout">
@@ -39,8 +49,12 @@
             <span class="chip-thumb"><img [src]="selectedProduct()?.image" alt="" /></span>
           }
           <span>
-            Stock actual de <strong>{{ selectedProduct()?.name }}</strong>:
-            <strong class="stock-chip-num">{{ formatNumber(selectedProduct()?.stock ?? 0) }}</strong> unidades
+            Stock actual de <strong>{{ selectedProduct()?.name }}</strong
+            >:
+            <strong class="stock-chip-num">{{
+              formatNumber(selectedProduct()?.stock ?? 0)
+            }}</strong>
+            unidades
           </span>
           <span class="muted">· mínimo {{ formatNumber(selectedProduct()?.minStock ?? 0) }}</span>
         </div>
@@ -59,7 +73,9 @@
               (click)="setType(t)"
               [attr.aria-pressed]="form.controls.type.value === t"
             >
-              <span class="type-symbol" aria-hidden="true">{{ t === 'entrada' ? '↓' : t === 'salida' ? '↑' : '⟲' }}</span>
+              <span class="type-symbol" aria-hidden="true">{{
+                t === 'entrada' ? '↓' : t === 'salida' ? '↑' : '⟲'
+              }}</span>
               <span class="type-txt">
                 <span class="type-main">{{ movementTypeLabel(t) }}</span>
                 <span class="type-hint">{{ movementTypeHint(t) }}</span>
@@ -68,7 +84,10 @@
           }
         </div>
         @if (form.controls.type.value === 'ajuste' && selectedProduct()) {
-          <span class="hint">El ajuste corrige el conteo: indica la cantidad final o la diferencia del producto.</span>
+          <span class="hint"
+            >El ajuste corrige el conteo: indica la cantidad final o la diferencia del
+            producto.</span
+          >
         }
       </div>
 
@@ -82,11 +101,22 @@
 
       <div class="field">
         <label for="reason">Motivo / referencia</label>
-        <input id="reason" type="text" formControlName="reason" placeholder="Ej. Reposición proveedor, pedido #1234…" autocomplete="off" />
+        <input
+          id="reason"
+          type="text"
+          formControlName="reason"
+          placeholder="Ej. Reposición proveedor, pedido #1234…"
+          autocomplete="off"
+        />
       </div>
 
       @if (notice()) {
-        <div class="show-full" [class]="notice().startsWith('Movimiento') ? 'alert alert-success' : 'alert alert-error'">{{ notice() }}</div>
+        <div
+          class="show-full"
+          [class]="notice().startsWith('Movimiento') ? 'alert alert-success' : 'alert alert-error'"
+        >
+          {{ notice() }}
+        </div>
       }
 
       <div class="full actions">
@@ -101,13 +131,21 @@
     <div class="card-head">
       <h2>Historial</h2>
       <div class="mini-filters">
-        <select aria-label="Filtrar por producto" [value]="filterProduct()" (change)="filterProduct.set($any($event.target).value)">
+        <select
+          aria-label="Filtrar por producto"
+          [value]="filterProduct()"
+          (change)="filterProduct.set($any($event.target).value)"
+        >
           <option value="">Todos los productos</option>
           @for (p of products.list(); track p.id) {
             <option [value]="p.id">{{ p.name }}</option>
           }
         </select>
-        <select aria-label="Filtrar por tipo" [value]="filterType()" (change)="filterType.set($any($event.target).value)">
+        <select
+          aria-label="Filtrar por tipo"
+          [value]="filterType()"
+          (change)="filterType.set($any($event.target).value)"
+        >
           <option value="">Todos los tipos</option>
           <option value="entrada">Entradas</option>
           <option value="salida">Salidas</option>
@@ -146,7 +184,9 @@
                       @if (row.image) {
                         <img [src]="row.image" alt="" loading="lazy" decoding="async" />
                       } @else {
-                        <span class="thumb-fallback">{{ row.productName.charAt(0).toUpperCase() }}</span>
+                        <span class="thumb-fallback">{{
+                          row.productName.charAt(0).toUpperCase()
+                        }}</span>
                       }
                     </span>
                     <span class="prod-txt">
@@ -156,17 +196,27 @@
                   </div>
                 </td>
                 <td>
-                  <span class="badge"
+                  <span
+                    class="badge"
                     [class.badge-ok]="row.movement.type === 'entrada'"
                     [class.badge-warn]="row.movement.type === 'salida'"
-                    [class.badge-none]="row.movement.type === 'ajuste'">
+                    [class.badge-none]="row.movement.type === 'ajuste'"
+                  >
                     {{ movementTypeLabel(row.movement.type) }}
                   </span>
                 </td>
-                <td class="num"
+                <td
+                  class="num"
                   [class.up]="row.movement.type === 'entrada'"
-                  [class.down]="row.movement.type === 'salida'">
-                  {{ row.movement.type === 'entrada' ? '+' : row.movement.type === 'salida' ? '−' : '±' }}{{ formatNumber(row.movement.quantity) }}
+                  [class.down]="row.movement.type === 'salida'"
+                >
+                  {{
+                    row.movement.type === 'entrada'
+                      ? '+'
+                      : row.movement.type === 'salida'
+                        ? '−'
+                        : '±'
+                  }}{{ formatNumber(row.movement.quantity) }}
                 </td>
                 <td class="muted">{{ row.movement.reason || '—' }}</td>
               </tr>

@@ -1,8 +1,24 @@
-import { Component, signal, computed, inject, ChangeDetectionStrategy, OnInit } from '@angular/core';
+import {
+  Component,
+  signal,
+  computed,
+  inject,
+  ChangeDetectionStrategy,
+  OnInit,
+  DestroyRef,
+} from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ProductService } from '../../services/product.service';
 import { MovementService } from '../../services/movement.service';
-import { formatMoney, formatNumber, formatDate, movementTypeLabel, movementTypeHint, movementTypeTitle } from '../../utils/format';
+import {
+  formatMoney,
+  formatNumber,
+  formatDate,
+  movementTypeLabel,
+  movementTypeHint,
+  movementTypeTitle,
+} from '../../utils/format';
 import { toCsv, downloadCsv, exportDate } from '../../utils/csv.util';
 import { Movement, MovementType } from '../../models/movement.model';
 import { ToastService } from '../../services/toast.service';
@@ -30,9 +46,12 @@ export class MovementsComponent implements OnInit {
   readonly filterProduct = signal('');
   readonly filterType = signal<MovementType | ''>('');
   readonly notice = signal('');
-  readonly types: MovementType[] = ['entrada', 'salida', 'ajuste'];
+  protected readonly types: MovementType[] = ['entrada', 'salida', 'ajuste'];
+  private readonly destroyRef = inject(DestroyRef);
   readonly selectedProduct = computed(() =>
-    this.form.controls.productId.value ? this.products.byId(this.form.controls.productId.value) : undefined,
+    this.form.controls.productId.value
+      ? this.products.byId(this.form.controls.productId.value)
+      : undefined,
   );
 
   readonly form = this.fb.nonNullable.group({
@@ -43,11 +62,13 @@ export class MovementsComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.form.controls.type.valueChanges.subscribe(() => this.notice.set(''));
+    this.form.controls.type.valueChanges
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.notice.set(''));
   }
 
   readonly rows = computed(() => {
-    const byId = new Map(this.products.list().map((p) => [p.id, p]));
+    const byId = this.products.byIdIndex();
     const rows: MovementRow[] = this.movements
       .list()
       .filter((m) => {
@@ -87,7 +108,10 @@ export class MovementsComponent implements OnInit {
     }
     const product = this.products.byId(value.productId);
     const productName = product?.name ?? '';
-    this.toasts.success(movementTypeTitle(value.type), `${productName} · ${value.quantity} ud · ${movementTypeHint(value.type).toLowerCase()}`);
+    this.toasts.success(
+      movementTypeTitle(value.type),
+      `${productName} · ${value.quantity} ud · ${movementTypeHint(value.type).toLowerCase()}`,
+    );
     this.form.controls.quantity.setValue(1);
     this.form.controls.reason.setValue('');
   }

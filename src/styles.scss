@@ -59,8 +59,10 @@
   --radius-sm: 13px;
   --shadow-raise1: -7px -7px 16px rgb(255 255 255 / 0.6), 7px 7px 18px rgb(198 190 220 / 0.26);
   --shadow-raise2: -10px -10px 24px rgb(255 255 255 / 0.7), 12px 12px 30px rgb(198 190 220 / 0.34);
-  --shadow-inset1: inset 4px 4px 10px rgb(198 190 220 / 0.34), inset -4px -4px 10px rgb(255 255 255 / 0.75);
-  --shadow-inset2: inset 2px 2px 7px rgb(198 190 220 / 0.3), inset -2px -2px 7px rgb(255 255 255 / 0.8);
+  --shadow-inset1:
+    inset 4px 4px 10px rgb(198 190 220 / 0.34), inset -4px -4px 10px rgb(255 255 255 / 0.75);
+  --shadow-inset2:
+    inset 2px 2px 7px rgb(198 190 220 / 0.3), inset -2px -2px 7px rgb(255 255 255 / 0.8);
   --shadow-pop: 0 18px 38px rgb(110 100 200 / 0.24);
 
   /* Curvas */
@@ -69,9 +71,9 @@
   --ease-pop: cubic-bezier(0.34, 1.56, 0.64, 1);
   --press: 140ms;
 
-  --font-sans: "SF Pro Display", -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
-  --font-serif: Georgia, "Times New Roman", serif;
-  --font-mono: "SF Mono", "Cascadia Mono", Consolas, "Courier New", monospace;
+  --font-sans: 'SF Pro Display', -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  --font-serif: Georgia, 'Times New Roman', serif;
+  --font-mono: 'SF Mono', 'Cascadia Mono', Consolas, 'Courier New', monospace;
 }
 
 * {
@@ -96,7 +98,7 @@ body {
 
 /* Firmamento con halos muy suaves */
 body::before {
-  content: "";
+  content: '';
   position: fixed;
   inset: 0;
   z-index: 0;
@@ -130,7 +132,7 @@ a {
 }
 
 .eyebrow::before {
-  content: "";
+  content: '';
   width: 6px;
   height: 6px;
   border-radius: 50%;
@@ -255,7 +257,9 @@ a {
   box-shadow: var(--shadow-raise1);
   border: 1px solid rgb(255 255 255 / 0.55);
   animation: rise 0.55s var(--ease-out) both;
-  transition: background-color 240ms ease, box-shadow 240ms ease;
+  transition:
+    background-color 240ms ease,
+    box-shadow 240ms ease;
 }
 
 .card-head {
@@ -420,12 +424,12 @@ label,
   color: var(--ink-2);
 }
 
-input[type="text"],
-input[type="number"],
-input[type="search"],
-input[type="date"],
-input[type="email"],
-input[type="tel"],
+input[type='text'],
+input[type='number'],
+input[type='search'],
+input[type='date'],
+input[type='email'],
+input[type='tel'],
 select,
 textarea {
   font-family: inherit;
@@ -437,7 +441,9 @@ textarea {
   padding: 10px 14px;
   width: 100%;
   box-shadow: var(--shadow-inset1);
-  transition: box-shadow 160ms ease, background 160ms ease;
+  transition:
+    box-shadow 160ms ease,
+    background 160ms ease;
   line-height: 1.4;
 }
 
@@ -446,7 +452,9 @@ select:focus,
 textarea:focus {
   outline: none;
   background: var(--surface);
-  box-shadow: var(--shadow-inset2), 0 0 0 3px rgb(124 92 255 / 0.18);
+  box-shadow:
+    var(--shadow-inset2),
+    0 0 0 3px rgb(124 92 255 / 0.18);
 }
 
 textarea {
@@ -485,7 +493,12 @@ textarea {
 
 /* ── Spinner ───────────────────────────────────────── */
 .skeleton {
-  background: linear-gradient(90deg, var(--neutral-200) 25%, var(--neutral-100) 50%, var(--neutral-200) 75%);
+  background: linear-gradient(
+    90deg,
+    var(--neutral-200) 25%,
+    var(--neutral-100) 50%,
+    var(--neutral-200) 75%
+  );
   background-size: 400% 100%;
   animation: shimmer 1.4s infinite;
 }
@@ -556,7 +569,8 @@ html.dark {
 
   --shadow-raise1: -7px -7px 16px rgb(255 255 255 / 0.045), 7px 7px 18px rgb(0 0 0 / 0.42);
   --shadow-raise2: -10px -10px 24px rgb(255 255 255 / 0.055), 12px 12px 30px rgb(0 0 0 / 0.5);
-  --shadow-inset1: inset 4px 4px 10px rgb(0 0 0 / 0.38), inset -4px -4px 10px rgb(255 255 255 / 0.05);
+  --shadow-inset1:
+    inset 4px 4px 10px rgb(0 0 0 / 0.38), inset -4px -4px 10px rgb(255 255 255 / 0.05);
   --shadow-inset2: inset 2px 2px 7px rgb(0 0 0 / 0.34), inset -2px -2px 7px rgb(255 255 255 / 0.05);
   --shadow-pop: 0 18px 38px rgb(0 0 0 / 0.5);
 
@@ -564,7 +578,9 @@ html.dark {
 }
 
 body {
-  transition: background-color 240ms ease, color 240ms ease;
+  transition:
+    background-color 240ms ease,
+    color 240ms ease;
 }
 
 .foot {
