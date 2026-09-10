@@ -1,0 +1,258 @@
+<section class="welcome">
+  <div>
+    <span class="chip chip-violet">Panel de administración</span>
+    <h1>Buenas. Así va tu inventario.</h1>
+    <p>Resumen del estado actual de productos, stock y actividad.</p>
+  </div>
+  <span class="live">
+    <i></i>
+    Actualizado ahora
+  </span>
+</section>
+
+<!-- ── Tarjetas KPI ───────────────────────────────── -->
+<section class="kpis">
+  <div class="kpi neum">
+    <div class="kpi-glow gi"></div>
+    <svg class="kpi-ic" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+      <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+      <line x1="12" y1="22.08" x2="12" y2="12"></line>
+    </svg>
+    <div class="kpi-txt">
+      <span class="kpi-label">Productos</span>
+      <span class="kpi-value">{{ formatNumber(stats().count) }}</span>
+      <span class="kpi-delta">tipos registrados</span>
+    </div>
+  </div>
+
+  <div class="kpi neum">
+    <div class="kpi-glow gt"></div>
+    <svg class="kpi-ic" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+      <polyline points="22 4 12 14.01 9 11.01"></polyline>
+    </svg>
+    <div class="kpi-txt">
+      <span class="kpi-label">Unidades en stock</span>
+      <span class="kpi-value">{{ formatNumber(stats().totalUnits) }}</span>
+      <span class="kpi-delta">total de existencias</span>
+    </div>
+  </div>
+
+  <div class="kpi neum">
+    <div class="kpi-glow ga"></div>
+    <svg class="kpi-ic" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"></circle>
+      <path d="M2 12h20"></path>
+      <path d="M12 2a15 15 0 0 1 4 10 15 15 0 0 1-4 10 15 15 0 0 1-4-10 15 15 0 0 1 4-10z"></path>
+    </svg>
+    <div class="kpi-txt">
+      <span class="kpi-label">Valor del inventario</span>
+      <span class="kpi-value">{{ formatMoney(stats().valueCost) }}</span>
+      <span class="kpi-delta">{{ formatMoney(stats().valueSale) }} a precio de venta</span>
+    </div>
+  </div>
+
+  <a class="kpi neum kpi-link" routerLink="/productos">
+    <div class="kpi-glow gr"></div>
+    <svg class="kpi-ic" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+      <line x1="12" y1="9" x2="12" y2="13"></line>
+      <line x1="12" y1="17" x2="12.01" y2="17"></line>
+    </svg>
+    <div class="kpi-txt">
+      <span class="kpi-label">Stock bajo</span>
+      <span class="kpi-value" [class.danger]="stats().low > 0">{{ formatNumber(stats().low) }}</span>
+      <span class="kpi-delta">alertas pendientes</span>
+    </div>
+  </a>
+</section>
+
+<!-- ── Panel principal: gráficas ───────────────────── -->
+<section class="panel neum big-panel">
+  <div class="panel-title">
+    <div>
+      <h2>Movimiento de existencias</h2>
+      <p>Entradas y salidas de los últimos 15 días</p>
+    </div>
+    <div class="panel-chips">
+      <span class="chip chip-violet"><i class="dot" style="background:#7c5cff"></i> Entradas</span>
+      <span class="chip chip-soft"><i class="dot" style="background:#ff6f61"></i> Salidas</span>
+    </div>
+  </div>
+
+  <div class="chart">
+    <svg [attr.viewBox]="'0 0 ' + dailySeries().w + ' ' + dailySeries().h" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="fillIn" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#7c5cff" stop-opacity="0.28"></stop>
+          <stop offset="100%" stop-color="#7c5cff" stop-opacity="0.02"></stop>
+        </linearGradient>
+        <linearGradient id="fillOut" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#ff6f61" stop-opacity="0.22"></stop>
+          <stop offset="100%" stop-color="#ff6f61" stop-opacity="0.02"></stop>
+        </linearGradient>
+      </defs>
+
+      @for (i of [0.2, 0.5, 0.8]; track i) {
+        <line class="grid" [attr.x1]="0" [attr.x2]="dailySeries().w" [attr.y1]="dailySeries().bottom * i" [attr.y2]="dailySeries().bottom * i"></line>
+      }
+
+      <path class="chart-fade" [attr.d]="dailySeries().entriesFill" fill="url(#fillIn)"></path>
+      <path class="chart-fade" [attr.d]="dailySeries().exitsFill" fill="url(#fillOut)"></path>
+
+      <path class="line" [attr.d]="dailySeries().entriesLine" stroke="#7c5cff"></path>
+      <path class="line" [attr.d]="dailySeries().exitsLine" stroke="#ff6f61"></path>
+
+      <circle class="point" [attr.cx]="dailySeries().lastEntry.x" [attr.cy]="dailySeries().lastEntry.y" r="4" fill="#fff" stroke="#7c5cff"></circle>
+      <circle class="point" [attr.cx]="dailySeries().lastExit.x" [attr.cy]="dailySeries().lastExit.y" r="4" fill="#fff" stroke="#ff6f61"></circle>
+
+      @for (i of dailySeries().axis; track i) {
+        <text class="axis" [attr.x]="dailySeries().w * (i / (dailySeries().labels.length - 1))" [attr.y]="dailySeries().h - 4" text-anchor="middle">
+          {{ dailySeries().labels[i] }}
+        </text>
+      }
+    </svg>
+  </div>
+</section>
+
+<!-- ── Donut + medidores ───────────────────────────── -->
+<section class="side-stack">
+
+  <div class="panel neum">
+    <div class="panel-title">
+      <h2>Stock por categoría</h2>
+      <span class="chip chip-soft">{{ donut().total }} ud</span>
+    </div>
+    <div class="donut-row">
+      <svg class="donut" viewBox="0 0 160 160" aria-hidden="true">
+        <circle cx="80" cy="80" r="60" fill="none" stroke="var(--track)" stroke-width="22"></circle>
+        <g transform="rotate(-90 80 80)" fill="none" stroke-width="22" stroke-linecap="round">
+          @for (s of donut().segments; track s.cat) {
+            <circle
+              cx="80" cy="80" r="60"
+              [attr.stroke]="s.color"
+              [attr.stroke-dasharray]="s.dash + ' ' + donut().circumference"
+              [attr.stroke-dashoffset]="s.offset"
+              [style.transition-delay]="($index * 100) + 'ms'"
+            ></circle>
+          }
+        </g>
+      </svg>
+      <ul class="legend">
+        @for (s of donut().segments.slice(0, 5); track s.cat) {
+          <li>
+            <i class="dot" [style.background]="s.color"></i>
+            <span class="legend-name">{{ s.label }}</span>
+            <span class="legend-val">{{ formatNumber(s.units) }} ud</span>
+            <b>{{ s.percent }}%</b>
+          </li>
+        }
+      </ul>
+    </div>
+  </div>
+
+  <div class="panel neum">
+    <div class="panel-title">
+      <h2>Salud del stock</h2>
+    </div>
+    <div class="gauges">
+      <div class="gauge">
+        <svg viewBox="0 0 160 100" aria-hidden="true">
+          <path d="M 20 100 A 60 60 0 0 1 140 100" fill="none" stroke="var(--track)" stroke-width="15" stroke-linecap="round"></path>
+          <path class="gauge-arc" d="M 20 100 A 60 60 0 0 1 140 100" fill="none" stroke="#7c5cff" stroke-width="15" stroke-linecap="round"
+            pathLength="100" [attr.stroke-dasharray]="gauges().healthy.pct + ' 100'"></path>
+          <text class="gauge-val" x="80" y="88" text-anchor="middle">{{ gauges().healthy.pct }}%</text>
+          <text class="gauge-lab" x="80" y="100" text-anchor="middle">en cobertura</text>
+        </svg>
+      </div>
+      <div class="gauge">
+        <svg viewBox="0 0 160 100" aria-hidden="true">
+          <path d="M 20 100 A 60 60 0 0 1 140 100" fill="none" stroke="var(--track)" stroke-width="15" stroke-linecap="round"></path>
+          <path class="gauge-arc" d="M 20 100 A 60 60 0 0 1 140 100" fill="none" stroke="#1fb6a6" stroke-width="15" stroke-linecap="round"
+            pathLength="100" [attr.stroke-dasharray]="gauges().coverage.pct + ' 100'"></path>
+          <text class="gauge-val" x="80" y="88" text-anchor="middle">{{ gauges().coverage.pct }}%</text>
+          <text class="gauge-lab" x="80" y="100" text-anchor="middle">de necesidad</text>
+        </svg>
+      </div>
+    </div>
+    <ul class="legend top-legend">
+      @for (c of topCategories(); track c.cat) {
+        <li>
+          <i class="dot" [style.background]="barColor(c.cat)"></i>
+          <span class="legend-name">{{ c.label }}</span>
+          <span class="legend-val">{{ formatNumber(c.units) }} ud</span>
+          <b>{{ c.pctText }}%</b>
+        </li>
+      }
+    </ul>
+  </div>
+
+</section>
+
+<!-- ── Respuestas rápido: alertas + recientes ───────── -->
+<section class="two-col">
+  <div class="panel neum">
+    <div class="panel-title">
+      <h2>Alertas de stock</h2>
+      <a class="link" routerLink="/productos">Ver todo</a>
+    </div>
+    @if (products.lowStock().length === 0) {
+      <div class="empty">
+        <strong>Todo en orden</strong>
+        <p>Ningún producto por debajo de su mínimo.</p>
+      </div>
+    } @else {
+      <ul class="list">
+        @for (p of products.lowStock(); track p.id) {
+          <li>
+            <span class="list-glow"></span>
+            <div class="list-main">
+              <strong>{{ p.name }}</strong>
+              <span class="sku muted">{{ p.sku }}</span>
+            </div>
+            <div class="list-stock">
+              <b>{{ formatNumber(p.stock) }}</b>
+              <span class="muted">/ mín {{ formatNumber(p.minStock) }}</span>
+            </div>
+            @if (p.stock === 0) {
+              <span class="pill pill-out">Agotado</span>
+            } @else {
+              <span class="pill pill-warn">Bajo</span>
+            }
+          </li>
+        }
+      </ul>
+    }
+  </div>
+
+  <div class="panel neum">
+    <div class="panel-title">
+      <h2>Movimientos recientes</h2>
+      <a class="link" routerLink="/movimientos">Ver todo</a>
+    </div>
+    @if (recent().length === 0) {
+      <div class="empty">
+        <strong>Aún no hay movimientos</strong>
+        <p>Registra entradas o salidas desde la sección de movimientos.</p>
+      </div>
+    } @else {
+      <ul class="list">
+        @for (item of recent(); track item.m.id) {
+          <li>
+            <span class="mv-ic"
+              [class.mv-in]="item.m.type === 'entrada'"
+              [class.mv-out]="item.m.type === 'salida'"
+              [class.mv-adj]="item.m.type === 'ajuste'">{{ typeLetter(item.m.type) }}</span>
+            <div class="list-main">
+              <strong>{{ item.product ? item.product.name : 'Producto eliminado' }}</strong>
+              <span class="muted">
+                {{ movementTypeLabel(item.m.type) }} · {{ item.m.type === 'entrada' ? '+' : item.m.type === 'salida' ? '−' : '±' }}{{ formatNumber(item.m.quantity) }} ud · {{ formatDate(item.m.date) }}
+              </span>
+            </div>
+          </li>
+        }
+      </ul>
+    }
+  </div>
+</section>

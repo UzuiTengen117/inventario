@@ -1,0 +1,41 @@
+<div class="iu" [class.dragging]="dragging()">
+  <input #fileInput type="file" accept="image/*" hidden (change)="onFiles(fileInput.files)" />
+
+  @if (value()) {
+    <div class="iu-preview">
+      <img [src]="value()" alt="" />
+      <div class="iu-overlay">
+        <button type="button" class="iu-btn" (click)="fileInput.click()">
+          <svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6"></path><path d="M1 20v-6h6"></path><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+          Cambiar
+        </button>
+        <button type="button" class="iu-x" (click)="remove()" aria-label="Quitar imagen" title="Quitar imagen">
+          <svg class="icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+    </div>
+  } @else {
+    <button
+      type="button"
+      class="iu-empty"
+      (click)="fileInput.click()"
+      (dragover)="onDrag($event, true)"
+      (dragleave)="onDrag($event, false)"
+      (drop)="onDrop($event)"
+      [attr.aria-label]="'Subir ' + label()"
+    >
+      @if (busy()) {
+        <span class="iu-spinner" aria-hidden="true"></span>
+      } @else {
+        <svg class="icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="3"></rect>
+          <circle cx="9" cy="9" r="2"></circle>
+          <path d="m21 15-3.09-3.09a2 2 0 0 0-2.82 0L6 21"></path>
+        </svg>
+      }
+      <strong>{{ busy() ? 'Procesando imagen…' : 'Subir ' + label() }}</strong>
+      <span>Arrastra una imagen aquí o pulsa para elegir.</span>
+      <span class="iu-note">JPG, PNG o WebP · se optimiza automáticamente</span>
+    </button>
+  }
+</div>

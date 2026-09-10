@@ -1,0 +1,105 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgb(15 15 28 / 0.5);
+  backdrop-filter: blur(6px);
+  animation: fade-in 220ms var(--ease-out) both;
+}
+
+.overlay.closing {
+  animation: fade-out 180ms var(--ease-in-out) both;
+}
+
+.dialog {
+  position: relative;
+  width: min(420px, 100%);
+  padding: 28px;
+  border-radius: 22px;
+  background: var(--surface);
+  border: 1px solid rgb(255 255 255 / 0.55);
+  box-shadow: var(--shadow-pop);
+  text-align: center;
+  animation: dialog-in 320ms var(--ease-pop) both;
+}
+
+.dialog.closing {
+  animation: dialog-out 180ms var(--ease-in-out) both;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes dialog-out {
+  to {
+    opacity: 0;
+    transform: translateY(8px) scale(0.96);
+  }
+}
+
+.dialog-icon {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 16px;
+  border-radius: 50%;
+  background: var(--red-bg);
+  color: var(--red);
+}
+
+.dialog-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 750;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  line-height: 1.35;
+}
+
+.dialog-msg {
+  margin: 8px 0 0;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+@media (max-width: 480px) {
+  .dialog {
+    padding: 24px 20px 20px;
+  }
+
+  .dialog-actions {
+    flex-direction: column-reverse;
+  }
+}

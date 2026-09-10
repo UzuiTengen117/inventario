@@ -1,0 +1,115 @@
+<section class="page-head">
+  <div>
+    <a class="back" routerLink="/productos">
+      <svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="19" y1="12" x2="5" y2="12"></line>
+        <polyline points="12 19 5 12 12 5"></polyline>
+      </svg>
+      Volver a productos
+    </a>
+    <span class="eyebrow">Registro</span>
+    <h1>{{ isEditing() ? 'Editar producto' : 'Nuevo producto' }}</h1>
+    <p class="muted">{{ isEditing() ? 'Modifica los datos y guarda los cambios.' : 'Completa la ficha para registrar el producto.' }}</p>
+  </div>
+</section>
+
+@if (error()) {
+  <div class="alert alert-error card-margin">{{ error() }}</div>
+}
+
+<form class="card form-card" [formGroup]="form" (ngSubmit)="submit()">
+  <div class="form-grid card-pad">
+    <div class="field field-full">
+      <span class="label">Fotografía del producto</span>
+      <app-image-upload label="fotografía" [value]="form.controls.image.value" (changed)="onImageChange($event)" />
+    </div>
+
+    <div class="field">
+      <label for="name">Nombre *</label>
+      <input id="name" type="text" formControlName="name" placeholder="Ej. Audífonos Bluetooth" autocomplete="off" />
+      @if (form.controls.name.touched && form.controls.name.hasError('required')) {
+        <span class="error-text">El nombre es obligatorio.</span>
+      }
+    </div>
+
+    <div class="field">
+      <label for="sku">SKU *</label>
+      <input id="sku" type="text" formControlName="sku" placeholder="Ej. ELC-001" autocomplete="off" />
+      @if (form.controls.sku.touched && form.controls.sku.hasError('required')) {
+        <span class="error-text">El SKU es obligatorio.</span>
+      }
+      @if (form.controls.sku.touched && form.controls.sku.hasError('minlength')) {
+        <span class="error-text">El SKU debe tener al menos 2 caracteres.</span>
+      }
+    </div>
+
+    <div class="field">
+      <label for="category">Categoría *</label>
+      <select id="category" formControlName="category">
+        <option value="">Selecciona…</option>
+        @for (c of categories; track c) {
+          <option [value]="c">{{ categoryLabel(c) }}</option>
+        }
+      </select>
+      @if (form.controls.category.touched && form.controls.category.hasError('required')) {
+        <span class="error-text">Elige una categoría.</span>
+      }
+    </div>
+
+    <div class="field">
+      <label for="supplier">Proveedor</label>
+      <select id="supplier" formControlName="supplierId">
+        <option value="">Sin proveedor</option>
+        @for (s of suppliers.list(); track s.id) {
+          <option [value]="s.id">{{ s.name }}</option>
+        }
+      </select>
+      <span class="hint">Opcional. Asigna el proveedor habitual.</span>
+    </div>
+
+    <div class="field">
+      <label for="minStock">Stock mínimo *</label>
+      <input id="minStock" type="number" formControlName="minStock" min="0" step="1" />
+      <span class="hint">Avísanos cuando el stock baje de esta cifra.</span>
+    </div>
+
+    <div class="field field-full">
+      <label for="description">Descripción</label>
+      <textarea id="description" formControlName="description" placeholder="Características, detalles, notas…"></textarea>
+    </div>
+
+    <div class="field">
+      <label for="price">Precio de venta *</label>
+      <input id="price" type="number" formControlName="price" min="0" step="0.01" />
+      @if (form.controls.price.touched && form.controls.price.hasError('min')) {
+        <span class="error-text">El precio debe ser mayor que 0.</span>
+      }
+    </div>
+
+    <div class="field">
+      <label for="cost">Coste *</label>
+      <input id="cost" type="number" formControlName="cost" min="0" step="0.01" />
+      <span class="hint">Valor de compra por unidad.</span>
+    </div>
+
+    <div class="field">
+      <label for="stock">Stock inicial *</label>
+      <input id="stock" type="number" formControlName="stock" min="0" step="1" />
+      @if (isEditing()) {
+        <span class="hint">Para entradas/salidas usa la sección de movimientos.</span>
+      }
+    </div>
+
+    <div class="field">
+      <span class="label">Valor en coste</span>
+      <div class="value-box">{{ formatMoney(productValue()) }}</div>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <button type="button" class="btn btn-outline" routerLink="/productos">Cancelar</button>
+    <button type="submit" class="btn btn-primary" [disabled]="form.invalid && form.touched">
+      {{ isEditing() ? 'Guardar cambios' : 'Crear producto' }}
+    </button>
+  </div>
+</form>

@@ -1,0 +1,156 @@
+<section class="page-head">
+  <div>
+    <span class="eyebrow">Análisis</span>
+    <h1>Informes</h1>
+    <p class="muted">Salud del inventario, reposición sugerida y valoración del stock.</p>
+  </div>
+  <div class="head-actions">
+    <button type="button" class="btn btn-outline btn-sm" (click)="exportReplenishCsv()" [disabled]="toReplenish().length === 0">
+      <svg class="icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+      Reposición (CSV)
+    </button>
+    <button type="button" class="btn btn-primary btn-sm" (click)="exportJson()">
+      <svg class="icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+      Informe completo (JSON)
+    </button>
+  </div>
+</section>
+
+<section class="kpis">
+  <div class="kpi">
+    <span class="kpi-label">Valor del stock (coste)</span>
+    <strong class="kpi-value">{{ formatMoney(totals().cost) }}</strong>
+    <span class="kpi-delta">{{ formatNumber(totals().units) }} unidades · {{ formatNumber(totals().count) }} productos</span>
+  </div>
+  <div class="kpi">
+    <span class="kpi-label">Valor de venta</span>
+    <strong class="kpi-value">{{ formatMoney(totals().sale) }}</strong>
+    <span class="kpi-delta">&nbsp;</span>
+  </div>
+  <div class="kpi">
+    <span class="kpi-label">Margen potencial</span>
+    <strong class="kpi-value">{{ formatMoney(totals().margin) }}</strong>
+    <span class="kpi-delta" [class]="totals().margin >= 0 ? 'up' : 'down'">{{ totals().margin >= 0 ? 'beneficio estimado' : 'pérdida estimada' }}</span>
+  </div>
+  <div class="kpi">
+    <span class="kpi-label">Cobertura de mínimos</span>
+    <strong class="kpi-value">{{ totals().coveragePct }}%</strong>
+    <span class="kpi-delta">unidades frente a los mínimos marcados</span>
+  </div>
+</section>
+
+<div class="grid-2">
+  <section class="card">
+    <div class="card-head">
+      <h2>Reposición sugerida</h2>
+      @if (toReplenish().length > 0) {
+        <span class="badge badge-warn">{{ formatNumber(toReplenish().length) }} por reponer</span>
+      }
+    </div>
+
+    @if (toReplenish().length === 0) {
+      <div class="card-body">
+        <div class="empty">
+          <strong>Stock saludable</strong>
+          <p>Todos los productos están por encima de su mínimo.</p>
+        </div>
+      </div>
+    } @else {
+      <div class="table-wrap">
+        <table class="data">
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th class="num">Stock</th>
+              <th class="num">Mínimo</th>
+              <th class="num">Sugerido</th>
+              <th>Proveedor</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (row of toReplenish(); track row.product.id) {
+              <tr>
+                <td>
+                  <div class="prod">
+                    <span class="thumb">
+                      @if (row.product.image) {
+                        <img [src]="row.product.image" alt="" />
+                      } @else {
+                        <span class="thumb-fallback">{{ row.product.name.charAt(0).toUpperCase() }}</span>
+                      }
+                    </span>
+                    <span class="prod-txt">
+                      <a class="prod-link" [routerLink]="['/productos/editar', row.product.id]">{{ row.product.name }}</a>
+                      <span class="sku muted table-sub">{{ row.product.sku }}</span>
+                    </span>
+                  </div>
+                </td>
+                <td class="num">
+                  <strong [class.crit]="row.product.stock === 0">{{ formatNumber(row.product.stock) }}</strong>
+                </td>
+                <td class="num muted">{{ formatNumber(row.product.minStock) }}</td>
+                <td class="num">
+                  <span class="badge badge-none">+{{ formatNumber(row.suggested) }}</span>
+                </td>
+                <td class="muted">{{ supplierName(row.product.supplierId) || '—' }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </section>
+
+  <section class="card">
+    <div class="card-head">
+      <h2>Valoración por categoría</h2>
+    </div>
+    <div class="card-body cat-list">
+      @for (c of byCategory(); track c.cat) {
+        <div class="cat-row">
+          <div class="cat-head">
+            <span class="cat-name">{{ c.label }}</span>
+            <span class="muted">{{ formatNumber(c.units) }} ud</span>
+          </div>
+          <div class="cat-track">
+            <div class="cat-fill" [style.width.%]="(c.units / categoryMax()) * 100"></div>
+          </div>
+          <div class="cat-meta">
+            <span>{{ formatMoney(c.cost) }} coste</span>
+            <span>{{ formatMoney(c.sale) }} venta</span>
+          </div>
+        </div>
+      }
+      @if (byCategory().length === 0) {
+        <div class="empty">
+          <strong>Sin datos</strong>
+          <p>Registra productos para ver la valoración por categoría.</p>
+        </div>
+      }
+    </div>
+  </section>
+</div>
+
+<section class="card top-card">
+  <div class="card-head">
+    <h2>Productos con más valor en stock</h2>
+  </div>
+  <div class="card-body top-grid">
+    @for (item of topByValue(); track item.p.id) {
+      <a class="top-item" [routerLink]="['/productos/editar', item.p.id]">
+        <span class="thumb">
+          @if (item.p.image) {
+            <img [src]="item.p.image" alt="" />
+          } @else {
+            <span class="thumb-fallback">{{ item.p.name.charAt(0).toUpperCase() }}</span>
+          }
+        </span>
+        <span class="top-txt">
+          <strong>{{ item.p.name }}</strong>
+          <span class="muted">{{ formatNumber(item.p.stock) }} ud</span>
+        </span>
+        <span class="top-val">{{ formatMoney(item.value) }}</span>
+      </a>
+    }
+  </div>
+</section>

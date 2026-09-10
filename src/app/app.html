@@ -1,0 +1,152 @@
+<div class="layout" [class.collapsed]="collapsed() && !mobile()">
+
+  <aside class="sidebar" [class.open]="mobileOpen()" aria-label="Menú lateral">
+    <div class="side-brand">
+      <a class="brand" routerLink="/" (click)="closeMobile()">
+        <span class="brand-mark" aria-hidden="true">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m12 3 9 5-9 5-9-5 9-5z"></path>
+          <path d="m3 13 9 5 9-5"></path>
+          <path d="m3 17 9 5 9-5"></path>
+        </svg>
+      </span>
+        <span class="brand-name" [class.hidden]="collapsed() && !mobile()">StockControl</span>
+      </a>
+    </div>
+
+    <nav class="side-nav" aria-label="Principal">
+      <a class="nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="closeMobile()" [title]="collapsed() && !mobile() ? 'Dashboard' : ''">
+        <svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="7" height="9" rx="1.5"></rect>
+          <rect x="14" y="3" width="7" height="5" rx="1.5"></rect>
+          <rect x="14" y="12" width="7" height="9" rx="1.5"></rect>
+          <rect x="3" y="16" width="7" height="5" rx="1.5"></rect>
+        </svg>
+        <span class="nav-label" [class.hidden]="collapsed() && !mobile()">Dashboard</span>
+      </a>
+
+      <a class="nav-link" routerLink="/productos" routerLinkActive="active" (click)="closeMobile()" [title]="collapsed() && !mobile() ? 'Productos' : ''">
+        <svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+          <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+          <line x1="12" y1="22.08" x2="12" y2="12"></line>
+        </svg>
+        <span class="nav-label" [class.hidden]="collapsed() && !mobile()">Productos</span>
+        @if (products.lowStock().length > 0) {
+          <span class="badge-count" [class.hidden]="collapsed() && !mobile()">{{ products.lowStock().length }}</span>
+        }
+      </a>
+
+      <a class="nav-link" routerLink="/movimientos" routerLinkActive="active" (click)="closeMobile()" [title]="collapsed() && !mobile() ? 'Movimientos' : ''">
+        <svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="17 1 21 5 17 9"></polyline>
+          <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+          <polyline points="7 23 3 19 7 15"></polyline>
+          <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+        </svg>
+        <span class="nav-label" [class.hidden]="collapsed() && !mobile()">Movimientos</span>
+      </a>
+
+      <a class="nav-link" routerLink="/proveedores" routerLinkActive="active" (click)="closeMobile()" [title]="collapsed() && !mobile() ? 'Proveedores' : ''">
+        <svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+          <circle cx="9" cy="7" r="4"></circle>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+        </svg>
+        <span class="nav-label" [class.hidden]="collapsed() && !mobile()">Proveedores</span>
+      </a>
+
+      <a class="nav-link" routerLink="/informes" routerLinkActive="active" (click)="closeMobile()" [title]="collapsed() && !mobile() ? 'Informes' : ''">
+        <svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="20" x2="12" y2="10"></line>
+          <line x1="18" y1="20" x2="18" y2="4"></line>
+          <line x1="6" y1="20" x2="6" y2="16"></line>
+        </svg>
+        <span class="nav-label" [class.hidden]="collapsed() && !mobile()">Informes</span>
+      </a>
+    </nav>
+
+    <div class="side-foot">
+      <div class="control-cluster" role="group" aria-label="Preferencias de interfaz">
+        <button type="button" class="ctl ctl-theme" (click)="toggleTheme()"
+          [attr.aria-pressed]="dark()"
+          [attr.aria-label]="dark() ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'"
+          [title]="dark() ? 'Modo claro' : 'Modo oscuro'">
+          <svg class="icon ctl-sun" [class.hidden-icon]="!dark()" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <svg class="icon ctl-moon" [class.hidden-icon]="dark()" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+
+        <button type="button" class="ctl" (click)="toggle()"
+          [attr.aria-label]="collapsed() && !mobile() ? 'Expandir menú lateral' : 'Contraer menú lateral'"
+          [title]="collapsed() && !mobile() ? 'Expandir menú' : 'Contraer menú'">
+          <svg class="icon ctl-in" [class.hidden-icon]="collapsed() && !mobile()" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 18l-6-6 6-6"></path>
+            <path d="M22 18l-6-6 6-6"></path>
+          </svg>
+          <svg class="icon ctl-out" [class.hidden-icon]="!(collapsed() && !mobile())" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 18l6-6-6-6"></path>
+            <path d="M2 18l6-6-6-6"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  @if (mobileOpen()) {
+    <button type="button" class="backdrop" aria-label="Cerrar menú" (click)="closeMobile()"></button>
+  }
+
+  <div class="mobile-bar">
+    <button class="icon-btn" (click)="mobileOpen.set(true)" aria-label="Abrir menú" title="Abrir menú">
+      <svg class="icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="3" y1="7" x2="21" y2="7"></line>
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="17" x2="21" y2="17"></line>
+      </svg>
+    </button>
+    <span class="mobile-title">StockControl</span>
+    <button class="icon-btn icon-btn-mf" (click)="toggleTheme()" [attr.aria-label]="dark() ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'" title="Tema">
+      <svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        @if (dark()) {
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        } @else {
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        }
+      </svg>
+    </button>
+  </div>
+
+  <main class="page">
+    <div class="page-inner">
+      <router-outlet />
+    </div>
+  </main>
+
+  <app-toasts />
+  <app-confirm-dialog />
+
+  <footer class="foot">
+    <span>StockControl · inventario local en tu navegador</span>
+  </footer>
+</div>

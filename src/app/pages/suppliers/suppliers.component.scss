@@ -1,0 +1,93 @@
+.page-head {
+  margin-bottom: 20px;
+}
+
+.page-head h1 {
+  margin: 8px 0 4px;
+  letter-spacing: -0.02em;
+}
+
+.page-head p {
+  margin: 0;
+}
+
+.banner {
+  margin-bottom: 16px;
+}
+
+.grid-layout {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 18px;
+  align-items: start;
+}
+
+.sup-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.full {
+  width: 100%;
+}
+
+.field-full {
+  grid-column: 1 / -1;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 4px;
+}
+
+.table-sub {
+  font-size: 12px;
+}
+
+.row-actions {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.row-actions .btn {
+  margin-left: 6px;
+}
+
+.sup-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatar {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 13px;
+  overflow: hidden;
+  background: var(--surface-2);
+  box-shadow: var(--shadow-inset2);
+  color: var(--violet);
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar-fallback {
+  font-family: var(--font-serif);
+  font-size: 17px;
+  font-weight: 600;
+}
+
+@media (max-width: 960px) {
+  .grid-layout {
+    grid-template-columns: 1fr;
+  }
+}

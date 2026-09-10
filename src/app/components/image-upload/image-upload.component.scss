@@ -1,0 +1,148 @@
+.iu {
+  width: 100%;
+}
+
+.iu-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 100%;
+  min-height: 150px;
+  padding: 20px;
+  border-radius: 16px;
+  border: 2px dashed var(--line-strong);
+  background: var(--well);
+  color: var(--muted);
+  font-family: inherit;
+  cursor: pointer;
+  transition:
+    border-color 160ms ease,
+    background 160ms ease,
+    color 160ms ease,
+    box-shadow 160ms ease,
+    transform var(--press) var(--ease-out);
+}
+
+.iu-empty strong {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink-2);
+}
+
+.iu-empty span {
+  font-size: 12.5px;
+  text-align: center;
+}
+
+.iu-empty .iu-note {
+  font-size: 11px;
+  color: var(--faint);
+}
+
+.iu.dragging .iu-empty,
+.iu-empty:hover {
+  border-color: var(--violet);
+  background: var(--violet-bg);
+  color: var(--violet-2);
+  box-shadow: var(--shadow-inset1);
+}
+
+.iu.dragging .iu-empty strong,
+.iu-empty:hover strong {
+  color: var(--violet-2);
+}
+
+.iu-empty:active {
+  transform: scale(0.99);
+}
+
+.iu-spinner {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 3px solid var(--violet-bg);
+  border-top-color: var(--violet);
+  animation: iu-spin 0.7s linear infinite;
+  margin-bottom: 4px;
+}
+
+@keyframes iu-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.iu-preview {
+  position: relative;
+  width: 100%;
+  max-width: 240px;
+  overflow: hidden;
+  border-radius: 16px;
+  box-shadow: var(--shadow-raise1);
+}
+
+.iu-preview img {
+  display: block;
+  width: 100%;
+  height: 170px;
+  object-fit: cover;
+  background: var(--well);
+}
+
+.iu-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px;
+  background: linear-gradient(to top, rgb(20 20 35 / 0.55), transparent 60%);
+  opacity: 0;
+  transition: opacity 160ms ease;
+}
+
+.iu-preview:hover .iu-overlay,
+.iu-preview:focus-within .iu-overlay {
+  opacity: 1;
+}
+
+.iu-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  border-radius: 10px;
+  padding: 7px 11px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 650;
+  background: rgb(255 255 255 / 0.92);
+  color: var(--ink);
+  cursor: pointer;
+  transition: transform var(--press) var(--ease-out), background 140ms ease;
+}
+
+.iu-btn:active {
+  transform: scale(0.94);
+}
+
+.iu-x {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 10px;
+  background: rgb(255 255 255 / 0.92);
+  color: var(--red);
+  cursor: pointer;
+  transition: transform var(--press) var(--ease-out), background 140ms ease;
+}
+
+.iu-x:active {
+  transform: scale(0.9);
+  background: var(--red-bg);
+}

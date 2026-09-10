@@ -1,0 +1,179 @@
+<section class="page-head">
+  <div>
+    <span class="eyebrow">Control de stock</span>
+    <h1>Movimientos</h1>
+    <p class="muted">Registra entradas, salidas y ajustes de stock.</p>
+  </div>
+  <button class="btn btn-outline" (click)="exportCsv()">
+      <svg class="icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+        <polyline points="7 10 12 15 17 10"></polyline>
+        <line x1="12" y1="15" x2="12" y2="3"></line>
+      </svg>
+      Exportar CSV
+    </button>
+</section>
+
+<div class="grid-layout">
+  <section class="card">
+    <div class="card-head">
+      <h2>Nuevo movimiento</h2>
+    </div>
+    <form class="card-body move-form" [formGroup]="form" (ngSubmit)="register()">
+      <div class="field">
+        <label for="product">Producto *</label>
+        <select id="product" formControlName="productId">
+          <option value="">Selecciona un producto…</option>
+          @for (p of products.list(); track p.id) {
+            <option [value]="p.id">{{ p.name }} ({{ p.sku }})</option>
+          }
+        </select>
+        @if (form.controls.productId.touched && form.controls.productId.hasError('required')) {
+          <span class="error-text">Selecciona un producto.</span>
+        }
+      </div>
+
+      @if (selectedProduct()) {
+        <div class="stock-chip">
+          @if (selectedProduct()?.image) {
+            <span class="chip-thumb"><img [src]="selectedProduct()?.image" alt="" /></span>
+          }
+          <span>
+            Stock actual de <strong>{{ selectedProduct()?.name }}</strong>:
+            <strong class="stock-chip-num">{{ formatNumber(selectedProduct()?.stock ?? 0) }}</strong> unidades
+          </span>
+          <span class="muted">· mínimo {{ formatNumber(selectedProduct()?.minStock ?? 0) }}</span>
+        </div>
+      }
+
+      <div class="field full">
+        <span class="label">Tipo de movimiento *</span>
+        <div class="type-picker">
+          @for (t of types; track t) {
+            <button
+              type="button"
+              class="type-option"
+              [class.type-in]="t === 'entrada'"
+              [class.type-out]="t === 'salida'"
+              [class.active]="form.controls.type.value === t"
+              (click)="setType(t)"
+              [attr.aria-pressed]="form.controls.type.value === t"
+            >
+              <span class="type-symbol" aria-hidden="true">{{ t === 'entrada' ? '↓' : t === 'salida' ? '↑' : '⟲' }}</span>
+              <span class="type-txt">
+                <span class="type-main">{{ movementTypeLabel(t) }}</span>
+                <span class="type-hint">{{ movementTypeHint(t) }}</span>
+              </span>
+            </button>
+          }
+        </div>
+        @if (form.controls.type.value === 'ajuste' && selectedProduct()) {
+          <span class="hint">El ajuste corrige el conteo: indica la cantidad final o la diferencia del producto.</span>
+        }
+      </div>
+
+      <div class="field">
+        <label for="qty">Cantidad *</label>
+        <input id="qty" type="number" formControlName="quantity" min="1" step="1" />
+        @if (form.controls.quantity.touched && form.controls.quantity.hasError('min')) {
+          <span class="error-text">La cantidad debe ser mayor que 0.</span>
+        }
+      </div>
+
+      <div class="field">
+        <label for="reason">Motivo / referencia</label>
+        <input id="reason" type="text" formControlName="reason" placeholder="Ej. Reposición proveedor, pedido #1234…" autocomplete="off" />
+      </div>
+
+      @if (notice()) {
+        <div class="show-full" [class]="notice().startsWith('Movimiento') ? 'alert alert-success' : 'alert alert-error'">{{ notice() }}</div>
+      }
+
+      <div class="full actions">
+        <button type="submit" class="btn btn-primary" [disabled]="form.invalid && form.touched">
+          Registrar movimiento
+        </button>
+      </div>
+    </form>
+  </section>
+
+  <section class="card">
+    <div class="card-head">
+      <h2>Historial</h2>
+      <div class="mini-filters">
+        <select aria-label="Filtrar por producto" [value]="filterProduct()" (change)="filterProduct.set($any($event.target).value)">
+          <option value="">Todos los productos</option>
+          @for (p of products.list(); track p.id) {
+            <option [value]="p.id">{{ p.name }}</option>
+          }
+        </select>
+        <select aria-label="Filtrar por tipo" [value]="filterType()" (change)="filterType.set($any($event.target).value)">
+          <option value="">Todos los tipos</option>
+          <option value="entrada">Entradas</option>
+          <option value="salida">Salidas</option>
+          <option value="ajuste">Ajustes</option>
+        </select>
+        @if (filterProduct() || filterType()) {
+          <button class="btn btn-ghost btn-sm" (click)="resetFilters()">Limpiar</button>
+        }
+      </div>
+    </div>
+
+    @if (rows().length === 0) {
+      <div class="empty">
+        <strong>Sin movimientos</strong>
+        <p>Registra una entrada o salida con el formulario.</p>
+      </div>
+    } @else {
+      <div class="table-wrap">
+        <table class="data">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Producto</th>
+              <th>Tipo</th>
+              <th class="num">Cantidad</th>
+              <th>Motivo</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (row of rows(); track row.movement.id) {
+              <tr>
+                <td class="muted nowrap">{{ formatDate(row.movement.date) }}</td>
+                <td>
+                  <div class="prod-cell">
+                    <span class="thumb">
+                      @if (row.image) {
+                        <img [src]="row.image" alt="" />
+                      } @else {
+                        <span class="thumb-fallback">{{ row.productName.charAt(0).toUpperCase() }}</span>
+                      }
+                    </span>
+                    <span class="prod-txt">
+                      <strong>{{ row.productName }}</strong>
+                      <div class="sku muted table-sub">{{ row.productSku }}</div>
+                    </span>
+                  </div>
+                </td>
+                <td>
+                  <span class="badge"
+                    [class.badge-ok]="row.movement.type === 'entrada'"
+                    [class.badge-warn]="row.movement.type === 'salida'"
+                    [class.badge-none]="row.movement.type === 'ajuste'">
+                    {{ movementTypeLabel(row.movement.type) }}
+                  </span>
+                </td>
+                <td class="num"
+                  [class.up]="row.movement.type === 'entrada'"
+                  [class.down]="row.movement.type === 'salida'">
+                  {{ row.movement.type === 'entrada' ? '+' : row.movement.type === 'salida' ? '−' : '±' }}{{ formatNumber(row.movement.quantity) }}
+                </td>
+                <td class="muted">{{ row.movement.reason || '—' }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </section>
+</div>
