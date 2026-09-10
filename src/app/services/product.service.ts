@@ -4,6 +4,19 @@ import { Product } from '../models/product.model';
 const STORAGE_KEY = 'inventory.products';
 const MOVEMENT_SIG_KEY = 'inventory.movement-signal';
 
+function isProduct(value: unknown): value is Product {
+  if (typeof value !== 'object' || value === null) return false;
+  const v = value as Record<string, unknown>;
+  return (
+    typeof v['id'] === 'string' &&
+    typeof v['sku'] === 'string' &&
+    typeof v['name'] === 'string' &&
+    typeof v['price'] === 'number' &&
+    typeof v['stock'] === 'number' &&
+    typeof v['createdAt'] === 'string'
+  );
+}
+
 @Injectable({ providedIn: 'root' })
 export class ProductService {
   private readonly products = signal<Product[]>(this.load());
@@ -20,7 +33,10 @@ export class ProductService {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) {
         const parsed = JSON.parse(raw) as Product[];
-        return Array.isArray(parsed) ? parsed : this.seed();
+        if (Array.isArray(parsed) && parsed.every(isProduct)) {
+          return parsed;
+        }
+        localStorage.removeItem(STORAGE_KEY);
       }
     } catch {
       /* datos corruptos: se regeneran */

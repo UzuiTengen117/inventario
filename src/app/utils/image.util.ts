@@ -1,10 +1,11 @@
 const MAX_DIM = 640;
 const QUALITY = 0.72;
+const ALLOWED_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp', 'image/gif']);
 
 export function fileToImageDataUrl(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
-    if (!file.type.startsWith('image/')) {
-      reject(new Error('El archivo no es una imagen.'));
+    if (!ALLOWED_TYPES.has(file.type)) {
+      reject(new Error('El archivo no es una imagen permitida (JPG, PNG, WebP, GIF).'));
       return;
     }
 
@@ -22,7 +23,7 @@ export function fileToImageDataUrl(file: File): Promise<string> {
         canvas.height = height;
         const ctx = canvas.getContext('2d');
         if (!ctx) {
-          resolve(String(reader.result));
+          reject(new Error('No se pudo procesar la imagen.'));
           return;
         }
         ctx.fillStyle = '#ffffff';

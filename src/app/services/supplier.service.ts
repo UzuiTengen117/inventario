@@ -3,6 +3,12 @@ import { Supplier } from '../models/supplier.model';
 
 const STORAGE_KEY = 'inventory.suppliers';
 
+function isSupplier(value: unknown): value is Supplier {
+  if (typeof value !== 'object' || value === null) return false;
+  const v = value as Record<string, unknown>;
+  return typeof v['id'] === 'string' && typeof v['name'] === 'string' && typeof v['createdAt'] === 'string';
+}
+
 @Injectable({ providedIn: 'root' })
 export class SupplierService {
   private readonly suppliers = signal<Supplier[]>(this.load());
@@ -14,7 +20,10 @@ export class SupplierService {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) {
         const parsed = JSON.parse(raw) as Supplier[];
-        if (Array.isArray(parsed)) return parsed.length ? parsed : this.seed();
+        if (Array.isArray(parsed) && parsed.every(isSupplier)) {
+          return parsed.length ? parsed : this.seed();
+        }
+        localStorage.removeItem(STORAGE_KEY);
       }
     } catch {
       /* datos corruptos: se regeneran */

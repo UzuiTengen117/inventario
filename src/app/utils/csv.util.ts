@@ -1,5 +1,12 @@
+const FORMULA_PREFIX = /^[=+\-@\t\r\n]/;
+
 export function escapeCsv(value: string | number | undefined | null): string {
-  const s = value == null ? '' : String(value);
+  if (value == null) return '';
+  if (typeof value === 'number') return String(value);
+  let s = value;
+  if (FORMULA_PREFIX.test(s)) {
+    s = "'" + s;
+  }
   if (/[",\n\r]/.test(s)) {
     return '"' + s.replace(/"/g, '""') + '"';
   }

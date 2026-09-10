@@ -5,6 +5,18 @@ import { Product } from '../models/product.model';
 
 const STORAGE_KEY = 'inventory.movements';
 
+function isMovement(value: unknown): value is Movement {
+  if (typeof value !== 'object' || value === null) return false;
+  const v = value as Record<string, unknown>;
+  return (
+    typeof v['id'] === 'string' &&
+    typeof v['productId'] === 'string' &&
+    (v['type'] === 'entrada' || v['type'] === 'salida' || v['type'] === 'ajuste') &&
+    typeof v['quantity'] === 'number' &&
+    typeof v['date'] === 'string'
+  );
+}
+
 @Injectable({ providedIn: 'root' })
 export class MovementService {
   private readonly movements = signal<Movement[]>(this.load());
@@ -20,7 +32,10 @@ export class MovementService {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) {
         const parsed = JSON.parse(raw) as Movement[];
-        return Array.isArray(parsed) ? parsed : [];
+        if (Array.isArray(parsed) && parsed.every(isMovement)) {
+          return parsed;
+        }
+        localStorage.removeItem(STORAGE_KEY);
       }
     } catch {
       /* datos corruptos */

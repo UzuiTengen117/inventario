@@ -1,0 +1,9 @@
+﻿
+> inventory-app@0.0.0 lint
+> ng lint
+
+
+Linting "inventory-app"...
+
+All files pass linting.
+

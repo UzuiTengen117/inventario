@@ -27,6 +27,8 @@ interface ImportReport {
 }
 
 const HEADERS = ['SKU', 'Producto', 'Categoría', 'Descripción', 'Precio', 'Coste', 'Stock', 'Mínimo', 'Proveedor'];
+const MAX_IMPORT_MB = 5;
+const MAX_IMPORT_BYTES = MAX_IMPORT_MB * 1024 * 1024;
 
 const HEADER_ALIASES: Record<string, string> = {
   sku: 'sku',
@@ -136,6 +138,12 @@ export class ProductsComponent {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
     if (!file) return;
+    if (file.size > MAX_IMPORT_BYTES) {
+      this.importReport.set({ ok: '', error: `El archivo supera el límite de ${MAX_IMPORT_MB} MB.` });
+      this.toasts.error('Importación fallida', `El archivo supera el límite de ${MAX_IMPORT_MB} MB.`);
+      input.value = '';
+      return;
+    }
     const reader = new FileReader();
     reader.onload = () => {
       this.runImport(String(reader.result ?? ''));

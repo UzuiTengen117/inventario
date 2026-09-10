@@ -1,5 +1,5 @@
 <div class="iu" [class.dragging]="dragging()">
-  <input #fileInput type="file" accept="image/*" hidden (change)="onFiles(fileInput.files)" />
+  <input #fileInput type="file" accept=".jpg,.jpeg,.png,.webp,.gif,image/jpeg,image/png,image/webp,image/gif" hidden (change)="onFiles(fileInput.files)" />
 
   @if (value()) {
     <div class="iu-preview">
