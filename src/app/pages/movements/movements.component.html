@@ -144,7 +144,7 @@
                   <div class="prod-cell">
                     <span class="thumb">
                       @if (row.image) {
-                        <img [src]="row.image" alt="" />
+                        <img [src]="row.image" alt="" loading="lazy" decoding="async" />
                       } @else {
                         <span class="thumb-fallback">{{ row.productName.charAt(0).toUpperCase() }}</span>
                       }

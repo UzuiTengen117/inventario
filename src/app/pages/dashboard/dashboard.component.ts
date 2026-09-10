@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ProductService } from '../../services/product.service';
 import { MovementService } from '../../services/movement.service';
@@ -20,6 +20,7 @@ function typeLetter(type: MovementType): string {
   imports: [RouterLink],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DashboardComponent {
   readonly products = inject(ProductService);
@@ -54,10 +55,6 @@ export class DashboardComponent {
     otros: '#b5aab0',
   };
 
-  barColor(cat: ProductCategory): string {
-    return this.catColors[cat] ?? '#b5aab0';
-  }
-
   private readonly dayLabel = new Intl.DateTimeFormat('es-ES', { day: 'numeric', month: 'short' });
   readonly gaugeC = 2 * Math.PI * 60;
 
@@ -76,7 +73,7 @@ export class DashboardComponent {
         label: c.label,
         units: c.units,
         percent: total > 0 ? Math.round(frac * 100) : 0,
-        color: this.barColor(c.cat),
+        color: this.catColors[c.cat],
         dash,
         offset,
       };

@@ -74,7 +74,7 @@
                   <div class="prod">
                     <span class="thumb">
                       @if (row.product.image) {
-                        <img [src]="row.product.image" alt="" />
+                        <img [src]="row.product.image" alt="" loading="lazy" decoding="async" />
                       } @else {
                         <span class="thumb-fallback">{{ row.product.name.charAt(0).toUpperCase() }}</span>
                       }
@@ -140,7 +140,7 @@
       <a class="top-item" [routerLink]="['/productos/editar', item.p.id]">
         <span class="thumb">
           @if (item.p.image) {
-            <img [src]="item.p.image" alt="" />
+            <img [src]="item.p.image" alt="" loading="lazy" decoding="async" />
           } @else {
             <span class="thumb-fallback">{{ item.p.name.charAt(0).toUpperCase() }}</span>
           }

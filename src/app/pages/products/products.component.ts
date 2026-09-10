@@ -1,4 +1,4 @@
-import { Component, computed, signal, inject } from '@angular/core';
+import { Component, computed, signal, inject, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ProductService } from '../../services/product.service';
 import { SupplierService } from '../../services/supplier.service';
@@ -61,6 +61,7 @@ const HEADER_ALIASES: Record<string, string> = {
   imports: [RouterLink],
   templateUrl: './products.component.html',
   styleUrl: './products.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductsComponent {
   readonly query = signal('');

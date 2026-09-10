@@ -179,7 +179,7 @@
     <ul class="legend top-legend">
       @for (c of topCategories(); track c.cat) {
         <li>
-          <i class="dot" [style.background]="barColor(c.cat)"></i>
+          <i class="dot" [style.background]="catColors[c.cat]"></i>
           <span class="legend-name">{{ c.label }}</span>
           <span class="legend-val">{{ formatNumber(c.units) }} ud</span>
           <b>{{ c.pctText }}%</b>

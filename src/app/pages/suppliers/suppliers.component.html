@@ -96,7 +96,7 @@
                   <span class="sup-cell">
                     <span class="avatar">
                       @if (row.supplier.image) {
-                        <img [src]="row.supplier.image" alt="" />
+                        <img [src]="row.supplier.image" alt="" loading="lazy" decoding="async" />
                       } @else {
                         <span class="avatar-fallback" aria-hidden="true">{{ initials(row.supplier.name) }}</span>
                       }

@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ProductService } from '../../services/product.service';
 import { SupplierService } from '../../services/supplier.service';
@@ -11,6 +11,7 @@ import { toCsv, downloadCsv, exportDate } from '../../utils/csv.util';
   imports: [RouterLink],
   templateUrl: './reports.component.html',
   styleUrl: './reports.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReportsComponent {
   readonly products = inject(ProductService);

@@ -102,7 +102,7 @@
                 <a class="prod-link" [routerLink]="['/productos/editar', row.product.id]">
                   <span class="thumb">
                     @if (row.product.image) {
-                      <img [src]="row.product.image" alt="" />
+                      <img [src]="row.product.image" alt="" loading="lazy" decoding="async" />
                     } @else {
                       <span class="thumb-fallback" aria-hidden="true">{{ row.product.name.charAt(0).toUpperCase() }}</span>
                     }

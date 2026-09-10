@@ -1,0 +1,30 @@
+﻿
+> inventory-app@0.0.0 build
+> ng build
+
+> Building...
+ÔêÜ Building...
+Initial chunk files | Names                  |  Raw size | Estimated transfer size
+main-VEIXO4OI.js    | main                   | 282.78 kB |                75.19 kB
+styles-URX4NXVO.css | styles                 |   9.20 kB |                 2.61 kB
+
+                    | Initial total          | 291.97 kB |                77.80 kB
+
+Lazy chunk files    | Names                  |  Raw size | Estimated transfer size
+chunk-06Wd8V0g.js   | -                      |  45.60 kB |                 9.79 kB
+chunk-C81RDEUp.js   | dashboard-component    |  23.01 kB |                 6.34 kB
+chunk-B-uMmvXu.js   | movements-component    |  14.50 kB |                 4.45 kB
+chunk-D4naDXx8.js   | products-component     |  14.09 kB |                 4.69 kB
+chunk-BerdKyME.js   | reports-component      |  13.22 kB |                 4.10 kB
+chunk-gN1nmTyh.js   | suppliers-component    |   9.74 kB |                 3.28 kB
+chunk-19_id6N_.js   | product-form-component |   9.63 kB |                 3.15 kB
+chunk-CWbWb1XL.js   | -                      |   7.33 kB |                 2.48 kB
+chunk-BOoyP5RB.js   | -                      |   1.86 kB |               819 bytes
+chunk-CDcyhEpi.js   | -                      |   1.65 kB |               730 bytes
+chunk-DGeN2xFU.js   | -                      |   1.14 kB |               578 bytes
+chunk-CXD4a0k4.js   | -                      | 877 bytes |               877 bytes
+
+Application bundle generation complete. [3.338 seconds] - 2026-09-10T05:21:26.264Z
+
+Output location: C:\Users\juanca\Documents\app\inventory-app\dist\inventory-app
+
