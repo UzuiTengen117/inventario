@@ -10,11 +10,11 @@
   --line-strong: #cfd1e2;
   --ink: #23263b;
   --ink-2: #4a4f6b;
-  --muted: #8b90ad;
+  --muted: #5f6472;
   --faint: #b5b9d0;
 
   /* Acentos */
-  --violet: #7c5cff;
+  --violet: #6848f2;
   --violet-2: #5b3fe0;
   --violet-bg: #ece7ff;
   --coral: #ff6f61;
@@ -33,7 +33,7 @@
   --red-bg: #fbe9ea;
   --red: #c0383a;
   --amber-bg: #fcf0d8;
-  --amber: #a96a0c;
+  --amber: #8a5a0a;
 
   /* Compatibilidad */
   --primary: var(--violet);
@@ -47,7 +47,7 @@
   --danger-soft: var(--red-bg);
   --neutral-900: #23263b;
   --neutral-700: #4a4f6b;
-  --neutral-500: #8b90ad;
+  --neutral-500: #5f6472;
   --neutral-400: #b5b9d0;
   --neutral-300: #c6c9da;
   --neutral-200: #e0e2ee;
@@ -460,6 +460,33 @@ textarea:focus {
 textarea {
   resize: vertical;
   min-height: 76px;
+}
+
+.skip-link {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 200;
+  padding: 10px 16px;
+  border-radius: 12px;
+  background: var(--violet-2);
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+  box-shadow: var(--shadow-raise2);
+  transform: translateY(-160%);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    transform 160ms ease,
+    opacity 160ms ease;
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .error-text {

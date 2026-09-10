@@ -1,4 +1,5 @@
 <div class="layout" [class.collapsed]="collapsed() && !mobile()">
+  <a class="skip-link" href="#main">Saltar al contenido</a>
   <aside class="sidebar" [class.open]="mobileOpen()" aria-label="Menú lateral">
     <div class="side-brand">
       <a class="brand" routerLink="/" (click)="closeMobile()">
@@ -319,7 +320,7 @@
     </button>
   </div>
 
-  <main class="page">
+  <main id="main" class="page">
     <div class="page-inner">
       <router-outlet />
     </div>
